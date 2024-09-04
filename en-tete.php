@@ -3,6 +3,7 @@
 <head>
    <title><?php echo $strTitreApplication; ?></title>
    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <link rel="stylesheet" type="text/css" href="style/style.css" /></head>
    <link rel="stylesheet" type="text/css" href="<?php echo $strNomFichierCSS; ?>" /></head>
 <body>
 <div class="container"> 
