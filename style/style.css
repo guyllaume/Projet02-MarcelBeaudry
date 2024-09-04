@@ -1,0 +1,45 @@
+body{
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+}
+#navEnTete{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1em 3em;
+    background-color: aliceblue;
+}
+#navList{
+    display: flex;
+    list-style: none;
+    gap: 1em;
+}
+#navList li a{
+    text-decoration: none;
+    color: burlywood;
+}
+#navList li a:hover{
+    text-decoration: none;
+    color: rgb(194, 173, 145);
+}
+#divPiedPage{
+    display: flex;
+    justify-content: center;
+    background-color: hsl(208, 58%, 87%);
+    padding: 1em 3em;
+}
+.lineSeparator{
+    border: 1px solid rgb(0, 0, 0);
+    width: 80px;
+    height: 0;
+    margin: auto 20px;
+}
+.container{
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+.contenu{
+    flex-grow: 1;
+}
