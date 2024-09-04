@@ -1,6 +1,6 @@
 <?php
 $strTitreApplication = 'Projet PHP';
-$strNomFichierCSS = 'style/signup.css';
+$strNomFichierCSS = 'style/loginSignup.css';
 require_once 'librairies-communes-2018-mm-jj.php';
 require_once 'en-tete.php';
 
