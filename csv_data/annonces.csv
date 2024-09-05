@@ -1,0 +1,4 @@
+NoUtilisateur,Parution,Categorie,DescriptionAbregee,DescriptionComplete,Prix,Photo,MiseAJour,Etat
+1,2024-03-01 12:00:00,3,Vélo de montagne à vendre,Vélo de montagne en excellent état peu utilisé. Marque Trek.,399.99,velo_montagne.jpg,2024-03-01 12:00:00,1
+2,2024-03-02 14:30:00,1,Appartement à louer,Bel appartement 3 1/2 à louer quartier tranquille.,800.00,appartement.jpg,2024-03-02 14:30:00,1
+3,2024-03-03 10:00:00,5,Cours de guitare,Offre des cours de guitare pour débutants et intermédiaires.,25.00,cours_guitare.jpg,2024-03-03 10:00:00,1

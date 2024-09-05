@@ -10,6 +10,7 @@ require_once 'en-tete.php';
             <div class="card-header">
                 <h1>Signup</h1>
             </div>
+            
             <div class="card-body">
                 <form action="signup.php" method="post">
                     <div class="form-group">
