@@ -33,7 +33,7 @@
       |----------------------------------------------------------------------------------|
       */
       function connexion() {
-         $this->cBD = mysqli_connect("localhost", "root", "jnmpdtdmj13!", $this->nomBD);
+         $this->cBD = mysqli_connect("localhost", "root", "", $this->nomBD);
 
          if ($this->cBD === false) {
              die("Problème de connexion… Message d'erreur retourné par PHP: " . mysqli_connect_error());
