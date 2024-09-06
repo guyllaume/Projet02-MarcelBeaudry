@@ -1,6 +1,7 @@
 <?php
 $strTitreApplication = 'Projet PHP';
 $strNomFichierCSS = 'style/loginSignup.css';
+$bIsConnected = false; // VÉRIFIE SI L'UTILISATEUR EST CONNECTÉ
 require_once 'librairies-communes-2018-mm-jj.php';
 require_once 'en-tete.php';
 require_once 'classe-mysql.php';

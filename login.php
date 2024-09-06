@@ -1,7 +1,11 @@
 <?php
 $strTitreApplication = 'Projet PHP';
 $strNomFichierCSS = 'style/loginSignup.css';
+<<<<<<< HEAD
 // Inclure les fichiers nécessaires
+=======
+$bIsConnected = false; // VÉRIFIE SI L'UTILISATEUR EST CONNECTÉ
+>>>>>>> b01033d32930aa80901e2545dc33ded04c7b516e
 require_once 'librairies-communes-2018-mm-jj.php';
 require_once 'en-tete.php';
 require_once 'classe-mysql.php';
@@ -79,7 +83,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php if (isset($erreur)) echo "<p class='error'>$erreur</p>"; ?>
         </div>
     </div>
+<<<<<<< HEAD
 </div>
+=======
+
+<script>
+    document.getElementById('btnSubmit').addEventListener('click', function() {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const passwordRegex = /^[a-z0-9]{5,15}$/;
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        let informationIsCorrect = true;
+        if(!emailRegex.test(email)) {
+            document.getElementById("errorEmail").innerHTML = "L'email n'est pas valide";
+            informationIsCorrect = false;
+        }else{
+            document.getElementById("errorEmail").innerHTML = "&nbsp;";
+        }
+        if(!passwordRegex.test(password)) {
+            document.getElementById("errorPassword").innerHTML = "Le mot de passe doit contenir entre 5 et 15 caractères";
+            informationIsCorrect = false;
+        }else{
+            document.getElementById("errorPassword").innerHTML = "&nbsp;";
+        }
+        if(informationIsCorrect) {
+            //window.location.href = "annonces.php";
+            this.form.submit();
+        }
+    })
+</script>
+>>>>>>> b01033d32930aa80901e2545dc33ded04c7b516e
 
 <?php
 require_once 'pied-page.php';
