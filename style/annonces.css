@@ -1,0 +1,16 @@
+.annonce-card{
+    display: flex;
+    align-items: center;
+    width: 90%;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 1.5px 0 2px aliceblue;
+}
+img{
+    width: 144px;
+    margin: 0px 10px;
+}
+.grow{
+    flex: 1;
+}
