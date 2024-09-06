@@ -1,6 +1,7 @@
 <?php
 $strTitreApplication = 'Projet PHP';
 $strNomFichierCSS = 'style/loginSignup.css';
+$bIsConnected = false; // VÉRIFIE SI L'UTILISATEUR EST CONNECTÉ
 require_once 'librairies-communes-2018-mm-jj.php';
 require_once 'en-tete.php';
 
@@ -55,7 +56,8 @@ require_once 'en-tete.php';
             document.getElementById("errorPassword").innerHTML = "&nbsp;";
         }
         if(informationIsCorrect) {
-            this.form.submit();
+            window.location.href = "annonces.php";
+            //this.form.submit(); TEMPORAIRE POUR TESTER ANNONCES.php
         }
     })
 </script>
