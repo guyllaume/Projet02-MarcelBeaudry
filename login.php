@@ -56,8 +56,8 @@ require_once 'en-tete.php';
             document.getElementById("errorPassword").innerHTML = "&nbsp;";
         }
         if(informationIsCorrect) {
-            window.location.href = "annonces.php";
-            //this.form.submit(); TEMPORAIRE POUR TESTER ANNONCES.php
+            //window.location.href = "annonces.php";
+            this.form.submit();
         }
     })
 </script>

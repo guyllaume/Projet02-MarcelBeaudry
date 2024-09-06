@@ -14,3 +14,25 @@ img{
 .grow{
     flex: 1;
 }
+.grow.center{
+    display: flex;
+    justify-content: center; /* Center content within the grow element */
+}
+.icon{
+    width: 16px;
+    margin: 0px;
+}
+.icon:hover{
+    cursor: pointer;
+}
+.options{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 30px 0;
+    width: 90%;
+}
+.disabled {
+    opacity: 0.5;
+    pointer-events: none; /* This makes the image non-interactive */
+}
