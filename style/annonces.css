@@ -1,0 +1,44 @@
+.annonce-card{
+    display: flex;
+    align-items: center;
+    width: 90%;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 1.5px 0 2px aliceblue;
+}
+img{
+    width: 144px;
+    margin: 0px 10px;
+}
+.grow{
+    flex: 1;
+}
+.grow.center{
+    display: flex;
+    justify-content: center; /* Center content within the grow element */
+}
+.icon{
+    width: 16px;
+    margin: 0px;
+}
+.icon:hover{
+    cursor: pointer;
+}
+.options{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 30px 0;
+    width: 90%;
+}
+.options select{
+    margin-right: 10px;
+}
+.options label{
+    margin-right: 5px;
+}
+.disabled {
+    opacity: 0.5;
+    pointer-events: none; /* This makes the image non-interactive */
+}
