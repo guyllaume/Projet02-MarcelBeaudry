@@ -33,8 +33,9 @@
       |----------------------------------------------------------------------------------|
       */
       function connexion() {
-         $this->cBD = mysqli_connect("localhost", "root", "", $this->nomBD);
-
+         global $strNomAdmin, $strMotPasseAdmin;
+         $this->cBD = mysqli_connect("localhost", $strNomAdmin, $strMotPasseAdmin, $this->nomBD);
+     
          if ($this->cBD === false) {
              die("Problème de connexion… Message d'erreur retourné par PHP: " . mysqli_connect_error());
          }
