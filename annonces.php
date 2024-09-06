@@ -9,18 +9,18 @@ require_once 'en-tete.php';
     <div class="contenu top">
         <form action="annonces.php" method="post"></form>
             <div class="options">
-                <label for="ddlOrdre">Ordre par : </label>
+                <label for="ddlOrdre">Ordre par</label>
                 <select name="ddlOrdre" id="ddlOrdre">
                     <option value="Asc">Ascendant</option>
                     <option value="Desc" selected>Descendant</option>
                 </select>
-                <label for="ddlOrdre">Trie par : </label>
+                <label for="ddlOrdre">Trie par</label>
                 <select name="ddlTri" id="ddlTri">
                     <option value="Date">Date de Parution</option>
                     <option value="Auteur">Auteur</option>
                     <option value="Categorie">Catégorie</option>
                 </select>
-                <label for="ddlOrdre">Nombre d'annonces : </label>
+                <label for="ddlOrdre">Nombre d'annonces</label>
                 <select name="ddlNbPages" id="ddlNbPages">
                     <option value="5">5</option>
                     <option value="10" selected>10</option>
@@ -31,6 +31,7 @@ require_once 'en-tete.php';
                     <input type="text" id="txtRecherche" name="txtRecherche">
                     <img class="icon" src="images/loupe.png" id="btnRecherche">
                 </div>
+                <label for="ddlOrdre">Pages</label>
                 <select name="ddlNoPage" id="ddlNoPage">
                     <option value="1">1</option>
                     <option value="2">2</option>
