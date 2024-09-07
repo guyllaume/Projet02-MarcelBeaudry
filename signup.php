@@ -4,9 +4,68 @@ $strNomFichierCSS = 'style/loginSignup.css';
 $bIsConnected = false; // VÉRIFIE SI L'UTILISATEUR EST CONNECTÉ
 require_once 'librairies-communes-2018-mm-jj.php';
 require_once 'en-tete.php';
+require_once 'classe-mysql.php';
+require_once '424x-cgodin-qc-ca.php';
+
+// Fonction pour se connecter à la base de données
+function connectDB() {
+    global $strNomAdmin, $strMotPasseAdmin;
+    try {
+        $conn = new PDO("mysql:host=localhost;dbname=PJF_MARCELBEAUDRY", $strNomAdmin, $strMotPasseAdmin);
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        return $conn;
+    } catch(PDOException $e) {
+        die("Erreur de connexion : " . $e->getMessage());
+    }
+}
+
+$message = '';
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+    
+    // Validation côté serveur
+    if (filter_var($email, FILTER_VALIDATE_EMAIL) && preg_match('/^[a-z0-9]{5,15}$/', $password)) {
+        $mysql = new mysql("PJF_MARCELBEAUDRY", "424x-cgodin-qc-ca.php");
+        
+        // Vérifier si l'email existe déjà
+        $mysql->requete = "SELECT * FROM utilisateurs WHERE Courriel = ?";
+        $stmt = mysqli_prepare($mysql->cBD, $mysql->requete);
+        mysqli_stmt_bind_param($stmt, "s", $email);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+        
+        if (mysqli_num_rows($result) > 0) {
+            $message = "Cette adresse email est déjà utilisée.";
+        } else {
+            // Insérer le nouvel utilisateur
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+            $mysql->requete = "INSERT INTO utilisateurs (Courriel, MotDePasse, Creation, Statut) VALUES (?, ?, NOW(), 1)";
+            $stmt = mysqli_prepare($mysql->cBD, $mysql->requete);
+            mysqli_stmt_bind_param($stmt, "ss", $email, $hashedPassword);
+            
+            if (mysqli_stmt_execute($stmt)) {
+                header("Location: login.php?message=" . urlencode("Inscription réussie. Vous pouvez maintenant vous connecter."));
+                exit();
+            } else {
+                $message = "Une erreur est survenue lors de l'inscription.";
+            }
+        }
+        
+        $mysql->deconnexion();
+    } else {
+        $message = "Les données saisies ne sont pas valides.";
+    }
+}
 
 ?>
     <div class="contenu">
+        <?php
+        if (!empty($message)) {
+            echo "<p class='message'>$message</p>";
+        }
+        ?>
         <div class="card">
             <div class="card-header">
                 <h1>Signup</h1>
@@ -91,5 +150,4 @@ require_once 'en-tete.php';
 
 <?php
 require_once 'pied-page.php';
-
 ?>
