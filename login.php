@@ -1,11 +1,8 @@
 <?php
 $strTitreApplication = 'Projet PHP';
 $strNomFichierCSS = 'style/loginSignup.css';
-<<<<<<< HEAD
 // Inclure les fichiers nécessaires
-=======
 $bIsConnected = false; // VÉRIFIE SI L'UTILISATEUR EST CONNECTÉ
->>>>>>> b01033d32930aa80901e2545dc33ded04c7b516e
 require_once 'librairies-communes-2018-mm-jj.php';
 require_once 'en-tete.php';
 require_once 'classe-mysql.php';
@@ -75,6 +72,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <input type="password" class="form-control" id="password" name="password" required>
                             <span class="error" id="errorPassword">&nbsp;</span>
                         </div>
+                        <a id="forgotPassword" href="forgotPassword.php">Mot de passe oublié?</a>
+                    <button type="button" id="btnSubmit">Submit</button>
                     </div>
                     <a id="forgotPassword" href="forgotPassword.php">Mot de passe oublié?</a>
                     <button type="submit" id="btnSubmit" class="btn btn-primary">Submit</button>
@@ -83,9 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php if (isset($erreur)) echo "<p class='error'>$erreur</p>"; ?>
         </div>
     </div>
-<<<<<<< HEAD
 </div>
-=======
 
 <script>
     document.getElementById('btnSubmit').addEventListener('click', function() {
@@ -112,7 +109,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     })
 </script>
->>>>>>> b01033d32930aa80901e2545dc33ded04c7b516e
 
 <?php
 require_once 'pied-page.php';
