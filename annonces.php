@@ -50,7 +50,7 @@ require_once 'en-tete.php';
             <h2>1-</h2> <!-- 1 needs to represent the index of the for loop -->
             <div class="grow">
                 <h3>999</h3> <!-- 999 = NoAnnonce -->
-                <p><a href="description.php">Ceci est une manette</a></p> <!-- DescriptionAbregee -->
+                <p><a class="afficherDescriptionComplete" >Ceci est une manette</a></p> <!-- DescriptionAbregee -->
                 <a href="contacter.php">Guyllaume Beaudry</a> <!-- nom prenom recu de NoUtilisateur  -->
             </div>
             <div class="right">
@@ -64,7 +64,7 @@ require_once 'en-tete.php';
             <h2>1-</h2> <!-- 1 needs to represent the index of the for loop -->
             <div class="grow">
                 <h3>999</h3> <!-- 999 = NoAnnonce -->
-                <p><a href="description.php">Ceci est une manette</a></p> <!-- DescriptionAbregee -->
+                <p><a class="afficherDescriptionComplete" >Ceci est une manette</a></p> <!-- DescriptionAbregee -->
                 <a href="contacter.php">Guyllaume Beaudry</a> <!-- nom prenom recu de NoUtilisateur  -->
             </div>
             <div class="right">
@@ -78,7 +78,7 @@ require_once 'en-tete.php';
             <h2>1-</h2> <!-- 1 needs to represent the index of the for loop -->
             <div class="grow">
                 <h3>999</h3> <!-- 999 = NoAnnonce -->
-                <p><a href="description.php">Ceci est une manette</a></p> <!-- DescriptionAbregee -->
+                <p><a class="afficherDescriptionComplete" >Ceci est une manette</a></p> <!-- DescriptionAbregee -->
                 <a href="contacter.php">Guyllaume Beaudry</a> <!-- nom prenom recu de NoUtilisateur  -->
             </div>
             <div class="right">
@@ -92,7 +92,7 @@ require_once 'en-tete.php';
             <h2>1-</h2> <!-- 1 needs to represent the index of the for loop -->
             <div class="grow">
                 <h3>999</h3> <!-- 999 = NoAnnonce -->
-                <p><a href="description.php">Ceci est une manette</a></p> <!-- DescriptionAbregee -->
+                <p><a class="afficherDescriptionComplete" >Ceci est une manette</a></p> <!-- DescriptionAbregee -->
                 <a href="contacter.php">Guyllaume Beaudry</a> <!-- nom prenom recu de NoUtilisateur  -->
             </div>
             <div class="right">
@@ -102,6 +102,59 @@ require_once 'en-tete.php';
             </div>
         </div>
     </div>
+    <div id="descriptionCompleteModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div class="modalBody">
+                <img class="photoComplete" src="photos-annonce/manette.png">
+                <h2>Description Complete</h2>
+                <p>Ceci est une manette avec plusieurs touche différentes. compatibles avec gamecube xbox et playstation</p>
+                <div>
+                    <p>Téléphone Maison : (111) 222-3333</p>
+                    <p>Téléphone Travail : (111) 222-3333 #1111</p>
+                    <p>Téléphone Cellulaire : (111) 222-3333</p>
+                </div>
+                <div class="smallDate">Dernière Mise à Jour : 0000/00/00 00h00</div>
+            </div>
+            <div class="modalOptions">
+                <button id="btnFermer">Fermer</button>
+            </div>
+        </div>
+    </div>
+
+    
+    <script>
+        // Get the modal
+        let modal = document.getElementById("descriptionCompleteModal");
+
+        // Get the button that opens the modal - change for class eventually
+        let btnsAfficherDescription = document.getElementsByClassName("afficherDescriptionComplete");
+        let btnFermer = document.getElementById("btnFermer"); //Devrait envoyer un post avec le NoAnnonce a retirer
+
+        // Get the <span> element that closes the modal
+        let span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks the button, open the modal
+        for (let i = 0; i < btnsAfficherDescription.length; i++) {
+            btnsAfficherDescription[i].addEventListener('click', function(){
+                modal.style.display = "block";
+            });
+        }
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+        btnFermer.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
 
 <?php
 require_once 'pied-page.php';

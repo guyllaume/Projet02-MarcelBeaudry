@@ -75,6 +75,7 @@ a{
 a:hover{
     text-decoration: none;
     color: rgb(194, 173, 145);
+    cursor: pointer;
 }
 .grow{
     flex: 1;
@@ -188,4 +189,10 @@ button:hover{
     text-align: center;
     margin-top: 15px;
     margin-bottom: 50px;
+}
+.modalBody h2{
+    margin-top: 30px;
+}
+.modalBody img{
+    max-width: 600px;
 }
