@@ -12,3 +12,31 @@ Message: Cliquez sur le lien suivant pour confirmer votre inscription :
 http://localhost/P2Local/Projet02-MarcelBeaudry/confirm.php?email=paulm11%40hotmail.com&token=7a67455f67b833024370b9828221e871
 Headers: From: noreply@votresite.com
 
+To: paulm55@hotmail.com
+Subject: Confirmation de votre inscription
+Message: Cliquez sur le lien suivant pour confirmer votre inscription : 
+
+http://localhost/P2Local/Projet02-MarcelBeaudry/confirm.php?email=paulm55%40hotmail.com&token=681babbb69b7aa76f0ecd837063ae7e0
+Headers: From: noreply@votresite.com
+
+To: paulmZZZ@hotmail.com
+Subject: Confirmation de votre inscription
+Message: Cliquez sur le lien suivant pour confirmer votre inscription : 
+
+http://localhost/P2Local/Projet02-MarcelBeaudry/confirm.php?email=paulmZZZ%40hotmail.com&token=e1ab4050166ba9a0d4adfe5387008ba0
+Headers: From: noreply@votresite.com
+
+To: paulmZZZ555@hotmail.com
+Subject: Confirmation de votre inscription
+Message: Cliquez sur le lien suivant pour confirmer votre inscription : 
+
+http://localhost/P2Local/Projet02-MarcelBeaudry/confirm.php?email=paulmZZZ555%40hotmail.com&token=b43aab7e3ff017809a09676c2eb0119d
+Headers: From: noreply@votresite.com
+
+To: paulmGGG@hotmail.com
+Subject: Confirmation de votre inscription
+Message: Cliquez sur le lien suivant pour confirmer votre inscription : 
+
+http://localhost/P2Local/Projet02-MarcelBeaudry/confirm.php?email=paulmGGG%40hotmail.com&token=317505265d3bcea4205af0e0f2ddc969
+Headers: From: noreply@votresite.com
+

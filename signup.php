@@ -35,6 +35,9 @@ function sendConfirmationEmail($email, $token) {
 
     return true; // Simule un envoi réussi
 }
+function customHash($password) {
+    return substr(hash('sha256', $password), 0, 15);
+}
 
 $message = '';
 
@@ -60,7 +63,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $token = bin2hex(random_bytes(16));
             
             // Insérer le nouvel utilisateur
-            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+            $hashedPassword = customHash($password);
             $mysql->requete = "INSERT INTO utilisateurs (Courriel, MotDePasse, Creation, Statut, ConfirmationToken) VALUES (?, ?, NOW(), 0, ?)";
             $stmt = mysqli_prepare($mysql->cBD, $mysql->requete);
             mysqli_stmt_bind_param($stmt, "sss", $email, $hashedPassword, $token);
