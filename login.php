@@ -1,11 +1,8 @@
 <?php
 $strTitreApplication = 'Projet PHP';
 $strNomFichierCSS = 'style/loginSignup.css';
-<<<<<<< HEAD
 // Inclure les fichiers nécessaires
-=======
 $bIsConnected = false; // VÉRIFIE SI L'UTILISATEUR EST CONNECTÉ
->>>>>>> b01033d32930aa80901e2545dc33ded04c7b516e
 require_once 'librairies-communes-2018-mm-jj.php';
 require_once 'en-tete.php';
 require_once 'classe-mysql.php';
@@ -83,9 +80,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php if (isset($erreur)) echo "<p class='error'>$erreur</p>"; ?>
         </div>
     </div>
-<<<<<<< HEAD
+
 </div>
-=======
 
 <script>
     document.getElementById('btnSubmit').addEventListener('click', function() {
@@ -112,7 +108,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     })
 </script>
->>>>>>> b01033d32930aa80901e2545dc33ded04c7b516e
 
 <?php
 require_once 'pied-page.php';

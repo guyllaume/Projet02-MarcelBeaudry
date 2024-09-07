@@ -1,0 +1,14 @@
+To: paulm@hotmail.com
+Subject: Confirmation de votre inscription
+Message: Cliquez sur le lien suivant pour confirmer votre inscription : 
+
+http://localhost/P2Local/Projet02-MarcelBeaudry/confirm.php?email=paulm%40hotmail.com&token=9609a81775e448eb931e761ad649e088
+Headers: From: noreply@votresite.com
+
+To: paulm11@hotmail.com
+Subject: Confirmation de votre inscription
+Message: Cliquez sur le lien suivant pour confirmer votre inscription : 
+
+http://localhost/P2Local/Projet02-MarcelBeaudry/confirm.php?email=paulm11%40hotmail.com&token=7a67455f67b833024370b9828221e871
+Headers: From: noreply@votresite.com
+

@@ -19,6 +19,23 @@ function connectDB() {
     }
 }
 
+function sendConfirmationEmail($email, $token) {
+    $to = $email;
+    $subject = "Confirmation de votre inscription";
+    $confirmationLink = "http://localhost/P2Local/Projet02-MarcelBeaudry/confirm.php?email=" . urlencode($email) . "&token=" . $token;
+    $message = "Cliquez sur le lien suivant pour confirmer votre inscription : \n\n" . $confirmationLink;
+    $headers = "From: noreply@votresite.com";
+
+    // Simuler l'envoi d'email en enregistrant dans un fichier
+    $logMessage = "To: $to\nSubject: $subject\nMessage: $message\nHeaders: $headers\n\n";
+    file_put_contents('email_log.txt', $logMessage, FILE_APPEND);
+
+    // Afficher le lien de confirmation (uniquement pour le développement)
+    echo "<p>Lien de confirmation (pour développement seulement) : <a href='$confirmationLink'>$confirmationLink</a></p>";
+
+    return true; // Simule un envoi réussi
+}
+
 $message = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -39,15 +56,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (mysqli_num_rows($result) > 0) {
             $message = "Cette adresse email est déjà utilisée.";
         } else {
+            // Générer un token de confirmation
+            $token = bin2hex(random_bytes(16));
+            
             // Insérer le nouvel utilisateur
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-            $mysql->requete = "INSERT INTO utilisateurs (Courriel, MotDePasse, Creation, Statut) VALUES (?, ?, NOW(), 1)";
+            $mysql->requete = "INSERT INTO utilisateurs (Courriel, MotDePasse, Creation, Statut, ConfirmationToken) VALUES (?, ?, NOW(), 0, ?)";
             $stmt = mysqli_prepare($mysql->cBD, $mysql->requete);
-            mysqli_stmt_bind_param($stmt, "ss", $email, $hashedPassword);
+            mysqli_stmt_bind_param($stmt, "sss", $email, $hashedPassword, $token);
             
             if (mysqli_stmt_execute($stmt)) {
-                header("Location: login.php?message=" . urlencode("Inscription réussie. Vous pouvez maintenant vous connecter."));
-                exit();
+                // Envoyer l'email de confirmation
+                if (sendConfirmationEmail($email, $token)) {
+                    $message = "Inscription réussie. Un email de confirmation a été simulé. Veuillez vérifier le fichier email_log.txt ou utiliser le lien affiché ci-dessus.";
+                } else {
+                    $message = "Inscription réussie, mais la simulation de l'envoi de l'email a échoué.";
+                }
             } else {
                 $message = "Une erreur est survenue lors de l'inscription.";
             }
