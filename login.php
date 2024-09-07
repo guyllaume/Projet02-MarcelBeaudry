@@ -29,7 +29,7 @@ require_once 'en-tete.php';
                             </div>
                         </div>
                         <a id="forgotPassword" href="forgotPassword.php">Mot de passe oublié?</a>
-                    <button type="button" id="btnSubmit" class="btn btn-primary">Submit</button>
+                    <button type="button" id="btnSubmit">Submit</button>
                     </div>
                 </form>
             </div>
