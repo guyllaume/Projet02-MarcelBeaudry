@@ -31,6 +31,7 @@ require_once 'en-tete.php';
             <img class="icon disabled" id="btnPrecedentPage" src="images/precedent.png">
             <img class="icon" id="btnNextPage" src="images/next.png">
             <img class="icon" id="btnLastPage" src="images/last.png">
+            <button class="ajouterAnnonce" id="btnAjouterAnnonce">Ajouter Annonce</button>
         </div>
         <div class="annonce-card"> <!--Affiche seulement les annonces de l'utilisateur connecté -->
             <img class="vignette" src="images/manette.png"> <!-- src is from database -->
@@ -76,6 +77,7 @@ require_once 'en-tete.php';
         let btnConfirmRetirer = document.getElementById("btnConfirmRetirer"); //Devrait envoyer un post avec le NoAnnonce a retirer
         let btnCancelRetirer = document.getElementById("btnCancelRetirer");
         let btnModifier = document.getElementById("btnModifier");
+        let btnAjouterAnnonce = document.getElementById("btnAjouterAnnonce");
 
         // Get the <span> element that closes the modal
         let span = document.getElementsByClassName("close")[0];
@@ -92,6 +94,9 @@ require_once 'en-tete.php';
         }
         btnModifier.onclick = function() {
             window.location.href = "modifierAnnonce.php";
+        }
+        btnAjouterAnnonce.onclick = function() {
+            window.location.href = "ajouterAnnonce.php";
         }
         // When the user clicks on <span> (x), close the modal
         span.onclick = function() {
