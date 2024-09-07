@@ -29,7 +29,7 @@ require_once 'en-tete.php';
                 </select>
                 <div class="grow center">
                     <input type="text" id="txtRecherche" name="txtRecherche">
-                    <img class="icon" src="images/loupe.png" id="btnRecherche">
+                    <img class="icon" src="photos-annonces/loupe.png" id="btnRecherche">
                 </div>
                 <label for="ddlOrdre">Pages</label>
                 <select name="ddlNoPage" id="ddlNoPage">
@@ -39,14 +39,14 @@ require_once 'en-tete.php';
                     <option value="4">4</option>
                     <!-- A generer avec le nombre d'annonces et le nb d'annonces par page-->
                 </select>
-                <img class="icon disabled" id="btnFirstPage" src="images/first.png">
-                <img class="icon disabled" id="btnPrecedentPage" src="images/precedent.png">
-                <img class="icon" id="btnNextPage" src="images/next.png">
-                <img class="icon" id="btnLastPage" src="images/last.png">
+                <img class="icon disabled" id="btnFirstPage" src="photos-annonces/first.png">
+                <img class="icon disabled" id="btnPrecedentPage" src="photos-annonces/precedent.png">
+                <img class="icon" id="btnNextPage" src="photos-annonces/next.png">
+                <img class="icon" id="btnLastPage" src="photos-annonces/last.png">
             </div>
         </form>
         <div class="annonce-card"> <!--Affiche seulement les annonces ACTIF (1) -->
-            <img class="vignette" src="images/manette.png"> <!-- src is from database -->
+            <img class="vignette" src="photos-annonces/manette.png"> <!-- src is from database -->
             <h2>1-</h2> <!-- 1 needs to represent the index of the for loop -->
             <div class="grow">
                 <h3>999</h3> <!-- 999 = NoAnnonce -->
@@ -60,7 +60,7 @@ require_once 'en-tete.php';
             </div>
         </div>
         <div class="annonce-card"> <!--Affiche seulement les annonces ACTIF (1) -->
-            <img class="vignette" src="images/manette.png"> <!-- src is from database -->
+            <img class="vignette" src="photos-annonces/manette.png"> <!-- src is from database -->
             <h2>1-</h2> <!-- 1 needs to represent the index of the for loop -->
             <div class="grow">
                 <h3>999</h3> <!-- 999 = NoAnnonce -->
@@ -74,7 +74,7 @@ require_once 'en-tete.php';
             </div>
         </div>
         <div class="annonce-card"> <!--Affiche seulement les annonces ACTIF (1) -->
-            <img class="vignette" src="images/manette.png"> <!-- src is from database -->
+            <img class="vignette" src="photos-annonces/manette.png"> <!-- src is from database -->
             <h2>1-</h2> <!-- 1 needs to represent the index of the for loop -->
             <div class="grow">
                 <h3>999</h3> <!-- 999 = NoAnnonce -->
@@ -88,7 +88,7 @@ require_once 'en-tete.php';
             </div>
         </div>
         <div class="annonce-card"> <!--Affiche seulement les annonces ACTIF (1) -->
-            <img class="vignette" src="images/manette.png"> <!-- src is from database -->
+            <img class="vignette" src="photos-annonces/manette.png"> <!-- src is from database -->
             <h2>1-</h2> <!-- 1 needs to represent the index of the for loop -->
             <div class="grow">
                 <h3>999</h3> <!-- 999 = NoAnnonce -->
