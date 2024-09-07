@@ -7,7 +7,7 @@ require_once 'en-tete.php';
 
 ?>
     <div class="contenu">
-
+    hello
     </div>
 
 <?php
