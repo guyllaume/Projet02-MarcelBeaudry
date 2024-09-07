@@ -1,15 +1,81 @@
 .annonce-card{
     display: flex;
-    align-items: center;
     width: 90%;
     margin: 20px auto;
     padding: 20px;
     border-radius: 20px;
     box-shadow: 0 1.5px 0 2px aliceblue;
 }
-img{
+.ajouter-annonce-card{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 1.5px 0 2px aliceblue;
+}
+.ajouter-annonce-card div{
+    width: 95%;
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+}
+.ajouter-annonce-card div label{
+    color: #70BCFF;
+}
+.ajouter-annonce-card button{
+    margin-top: 40px;
+    width: 180px;
+}
+.error{
+    color: rgb(168, 0, 0);
+    font-size: small;
+    margin-left: 5px;
+}
+.ajouter-annonce-form{
+    display: flex;
+    justify-content: center;
+}
+.vignette{
     width: 144px;
-    margin: 0px 10px;
+    border-radius: 20px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+    margin: -20px;
+    margin-right: 10px;
+}
+h1{
+    color: #0069CC;
+}
+h2{
+    margin: 0;
+    margin-top: -20px;
+    margin-right: 20px;
+    color: #0069CC;
+}
+h3{
+    margin: 0;
+    color: #70BCFF;
+}
+p{
+    margin: 5px 0;
+    color: #70BCFF;
+}
+a{
+    text-decoration: none;
+    color: rgb(204, 147, 72);
+}
+.price{
+    font-weight: bold;
+    color: #0069CC;
+    font-size: x-large;
+    margin-top: 15px;
+    margin-bottom: -5px;
+}
+a:hover{
+    text-decoration: none;
+    color: rgb(194, 173, 145);
+    cursor: pointer;
 }
 .grow{
     flex: 1;
@@ -17,6 +83,10 @@ img{
 .grow.center{
     display: flex;
     justify-content: center; /* Center content within the grow element */
+}
+.grow.right{
+    display: flex;
+    justify-content:end; /* Center content within the grow element */
 }
 .icon{
     width: 16px;
@@ -41,4 +111,88 @@ img{
 .disabled {
     opacity: 0.5;
     pointer-events: none; /* This makes the image non-interactive */
+}
+.bottomOptions{
+    display: flex;
+    align-items:end;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+.center.top{
+    text-align: center;
+}
+button{
+    background-color: aliceblue;
+    border: 1px solid rgb(168, 207, 241);
+    border-radius: 10px;
+    padding: 5px 10px;
+    width: 100px;
+    height: 40px;
+    margin: 0px 5px;
+    align-self: flex-end;
+}
+.ajouterAnnonce{
+    margin: 0;
+    margin-left: 5px;
+}
+button:hover{
+    cursor: pointer;
+    box-shadow: inset 0 0 5px rgb(168, 207, 241);
+}
+.smallDate{
+    font-size: small;
+    font-style: italic;
+    color: #70BCFF;
+}
+/* Modal container - hidden by default */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.5); /* Black with opacity */
+}
+
+/* Modal content */
+.modal-content {
+    background-color: #fff;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 50%;
+    max-width: 600px;
+    border-radius: 20px;
+}
+
+/* Close button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+.modalOptions{
+    display: flex;
+    justify-content: end;
+}
+.modalTitle{
+    text-align: center;
+    margin-top: 15px;
+    margin-bottom: 50px;
+}
+.modalBody h2{
+    margin-top: 30px;
+}
+.modalBody img{
+    max-width: 600px;
 }
