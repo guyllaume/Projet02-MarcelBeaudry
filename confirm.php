@@ -24,7 +24,7 @@ if (empty($email) || empty($token)) {
     $result = mysqli_stmt_get_result($stmt);
 
     if (mysqli_num_rows($result) == 1) {
-        $updateQuery = "UPDATE utilisateurs SET Statut = 1, ConfirmationToken = NULL WHERE Courriel = ?";
+        $updateQuery = "UPDATE utilisateurs SET Statut = 9, ConfirmationToken = NULL WHERE Courriel = ?";
         $updateStmt = mysqli_prepare($mysql->cBD, $updateQuery);
         mysqli_stmt_bind_param($updateStmt, "s", $email);
         

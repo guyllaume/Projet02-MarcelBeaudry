@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $passwordMatch = (customHash($password) === $user['MotDePasse']);
         if ($passwordMatch) {
             // Vérifier le statut du compte
-            if ($user['Statut'] == 1) {
+            if ($user['Statut'] == 9) {
                 // Compte activé, rediriger vers annonces.php
                 session_start();
                 $_SESSION['user_id'] = $user['NoUtilisateur'];
