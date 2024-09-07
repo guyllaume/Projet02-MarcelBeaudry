@@ -6,10 +6,42 @@
     border-radius: 20px;
     box-shadow: 0 1.5px 0 2px aliceblue;
 }
-img{
+.vignette{
     width: 144px;
-    height: 100%;
-    margin: 0px 10px;
+    border-radius: 20px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+    margin: -20px;
+    margin-right: 10px;
+}
+h2{
+    margin: 0;
+    margin-top: -20px;
+    margin-right: 20px;
+    color: #0069CC;
+}
+h3{
+    margin: 0;
+    color: #70BCFF;
+}
+p{
+    margin: 5px 0;
+    color: #70BCFF;
+}
+a{
+    text-decoration: none;
+    color: rgb(204, 147, 72);
+}
+.price{
+    font-weight: bold;
+    color: #0069CC;
+    font-size: x-large;
+    margin-top: 15px;
+    margin-bottom: -5px;
+}
+a:hover{
+    text-decoration: none;
+    color: rgb(194, 173, 145);
 }
 .grow{
     flex: 1;
