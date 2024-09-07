@@ -6,6 +6,36 @@
     border-radius: 20px;
     box-shadow: 0 1.5px 0 2px aliceblue;
 }
+.ajouter-annonce-card{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 1.5px 0 2px aliceblue;
+}
+.ajouter-annonce-card div{
+    width: 95%;
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+}
+.ajouter-annonce-card div label{
+    color: #70BCFF;
+}
+.ajouter-annonce-card button{
+    margin-top: 40px;
+    width: 180px;
+}
+.error{
+    color: rgb(168, 0, 0);
+    font-size: small;
+    margin-left: 5px;
+}
+.ajouter-annonce-form{
+    display: flex;
+    justify-content: center;
+}
 .vignette{
     width: 144px;
     border-radius: 20px;
@@ -13,6 +43,9 @@
     border-bottom-right-radius: 0px;
     margin: -20px;
     margin-right: 10px;
+}
+h1{
+    color: #0069CC;
 }
 h2{
     margin: 0;
@@ -42,6 +75,7 @@ a{
 a:hover{
     text-decoration: none;
     color: rgb(194, 173, 145);
+    cursor: pointer;
 }
 .grow{
     flex: 1;
@@ -155,4 +189,10 @@ button:hover{
     text-align: center;
     margin-top: 15px;
     margin-bottom: 50px;
+}
+.modalBody h2{
+    margin-top: 30px;
+}
+.modalBody img{
+    max-width: 600px;
 }

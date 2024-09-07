@@ -27,14 +27,14 @@ require_once 'en-tete.php';
                 <option value="4">4</option>
                 <!-- A generer avec le nombre d'annonces et le nb d'annonces par page-->
             </select>
-            <img class="icon disabled" id="btnFirstPage" src="images/first.png">
-            <img class="icon disabled" id="btnPrecedentPage" src="images/precedent.png">
-            <img class="icon" id="btnNextPage" src="images/next.png">
-            <img class="icon" id="btnLastPage" src="images/last.png">
+            <img class="icon disabled" id="btnFirstPage" src="photos-annonce/first.png">
+            <img class="icon disabled" id="btnPrecedentPage" src="photos-annonce/precedent.png">
+            <img class="icon" id="btnNextPage" src="photos-annonce/next.png">
+            <img class="icon" id="btnLastPage" src="photos-annonce/last.png">
             <button class="ajouterAnnonce" id="btnAjouterAnnonce">Ajouter Annonce</button>
         </div>
         <div class="annonce-card"> <!--Affiche seulement les annonces de l'utilisateur connecté -->
-            <img class="vignette" src="images/manette.png"> <!-- src is from database -->
+            <img class="vignette" src="photos-annonce/manette.png"> <!-- src is from database -->
             <h2>1-</h2> <!-- 1 needs to represent the index of the for loop -->
             <div class="grow">
                 <h3>999</h3> <!-- 999 = NoAnnonce -->

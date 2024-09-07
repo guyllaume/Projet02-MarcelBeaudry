@@ -29,7 +29,7 @@ require_once 'en-tete.php';
                 </select>
                 <div class="grow center">
                     <input type="text" id="txtRecherche" name="txtRecherche">
-                    <img class="icon" src="images/loupe.png" id="btnRecherche">
+                    <img class="icon" src="photos-annonce/loupe.png" id="btnRecherche">
                 </div>
                 <label for="ddlOrdre">Pages</label>
                 <select name="ddlNoPage" id="ddlNoPage">
@@ -39,18 +39,18 @@ require_once 'en-tete.php';
                     <option value="4">4</option>
                     <!-- A generer avec le nombre d'annonces et le nb d'annonces par page-->
                 </select>
-                <img class="icon disabled" id="btnFirstPage" src="images/first.png">
-                <img class="icon disabled" id="btnPrecedentPage" src="images/precedent.png">
-                <img class="icon" id="btnNextPage" src="images/next.png">
-                <img class="icon" id="btnLastPage" src="images/last.png">
+                <img class="icon disabled" id="btnFirstPage" src="photos-annonce/first.png">
+                <img class="icon disabled" id="btnPrecedentPage" src="photos-annonce/precedent.png">
+                <img class="icon" id="btnNextPage" src="photos-annonce/next.png">
+                <img class="icon" id="btnLastPage" src="photos-annonce/last.png">
             </div>
         </form>
         <div class="annonce-card"> <!--Affiche seulement les annonces ACTIF (1) -->
-            <img class="vignette" src="images/manette.png"> <!-- src is from database -->
+            <img class="vignette" src="photos-annonce/manette.png"> <!-- src is from database -->
             <h2>1-</h2> <!-- 1 needs to represent the index of the for loop -->
             <div class="grow">
                 <h3>999</h3> <!-- 999 = NoAnnonce -->
-                <p><a href="description.php">Ceci est une manette</a></p> <!-- DescriptionAbregee -->
+                <p><a class="afficherDescriptionComplete" >Ceci est une manette</a></p> <!-- DescriptionAbregee -->
                 <a href="contacter.php">Guyllaume Beaudry</a> <!-- nom prenom recu de NoUtilisateur  -->
             </div>
             <div class="right">
@@ -60,11 +60,11 @@ require_once 'en-tete.php';
             </div>
         </div>
         <div class="annonce-card"> <!--Affiche seulement les annonces ACTIF (1) -->
-            <img class="vignette" src="images/manette.png"> <!-- src is from database -->
+            <img class="vignette" src="photos-annonce/manette.png"> <!-- src is from database -->
             <h2>1-</h2> <!-- 1 needs to represent the index of the for loop -->
             <div class="grow">
                 <h3>999</h3> <!-- 999 = NoAnnonce -->
-                <p><a href="description.php">Ceci est une manette</a></p> <!-- DescriptionAbregee -->
+                <p><a class="afficherDescriptionComplete" >Ceci est une manette</a></p> <!-- DescriptionAbregee -->
                 <a href="contacter.php">Guyllaume Beaudry</a> <!-- nom prenom recu de NoUtilisateur  -->
             </div>
             <div class="right">
@@ -74,11 +74,11 @@ require_once 'en-tete.php';
             </div>
         </div>
         <div class="annonce-card"> <!--Affiche seulement les annonces ACTIF (1) -->
-            <img class="vignette" src="images/manette.png"> <!-- src is from database -->
+            <img class="vignette" src="photos-annonce/manette.png"> <!-- src is from database -->
             <h2>1-</h2> <!-- 1 needs to represent the index of the for loop -->
             <div class="grow">
                 <h3>999</h3> <!-- 999 = NoAnnonce -->
-                <p><a href="description.php">Ceci est une manette</a></p> <!-- DescriptionAbregee -->
+                <p><a class="afficherDescriptionComplete" >Ceci est une manette</a></p> <!-- DescriptionAbregee -->
                 <a href="contacter.php">Guyllaume Beaudry</a> <!-- nom prenom recu de NoUtilisateur  -->
             </div>
             <div class="right">
@@ -88,11 +88,11 @@ require_once 'en-tete.php';
             </div>
         </div>
         <div class="annonce-card"> <!--Affiche seulement les annonces ACTIF (1) -->
-            <img class="vignette" src="images/manette.png"> <!-- src is from database -->
+            <img class="vignette" src="photos-annonce/manette.png"> <!-- src is from database -->
             <h2>1-</h2> <!-- 1 needs to represent the index of the for loop -->
             <div class="grow">
                 <h3>999</h3> <!-- 999 = NoAnnonce -->
-                <p><a href="description.php">Ceci est une manette</a></p> <!-- DescriptionAbregee -->
+                <p><a class="afficherDescriptionComplete" >Ceci est une manette</a></p> <!-- DescriptionAbregee -->
                 <a href="contacter.php">Guyllaume Beaudry</a> <!-- nom prenom recu de NoUtilisateur  -->
             </div>
             <div class="right">
@@ -102,6 +102,59 @@ require_once 'en-tete.php';
             </div>
         </div>
     </div>
+    <div id="descriptionCompleteModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div class="modalBody">
+                <img class="photoComplete" src="photos-annonce/manette.png">
+                <h2>Description Complete</h2>
+                <p>Ceci est une manette avec plusieurs touche différentes. compatibles avec gamecube xbox et playstation</p>
+                <div>
+                    <p>Téléphone Maison : (111) 222-3333</p>
+                    <p>Téléphone Travail : (111) 222-3333 #1111</p>
+                    <p>Téléphone Cellulaire : (111) 222-3333</p>
+                </div>
+                <div class="smallDate">Dernière Mise à Jour : 0000/00/00 00h00</div>
+            </div>
+            <div class="modalOptions">
+                <button id="btnFermer">Fermer</button>
+            </div>
+        </div>
+    </div>
+
+    
+    <script>
+        // Get the modal
+        let modal = document.getElementById("descriptionCompleteModal");
+
+        // Get the button that opens the modal - change for class eventually
+        let btnsAfficherDescription = document.getElementsByClassName("afficherDescriptionComplete");
+        let btnFermer = document.getElementById("btnFermer"); //Devrait envoyer un post avec le NoAnnonce a retirer
+
+        // Get the <span> element that closes the modal
+        let span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks the button, open the modal
+        for (let i = 0; i < btnsAfficherDescription.length; i++) {
+            btnsAfficherDescription[i].addEventListener('click', function(){
+                modal.style.display = "block";
+            });
+        }
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+        btnFermer.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
 
 <?php
 require_once 'pied-page.php';
