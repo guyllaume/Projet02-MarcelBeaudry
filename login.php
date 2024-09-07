@@ -19,7 +19,9 @@ function connectDB() {
         die("Erreur de connexion : " . $e->getMessage());
     }
 }
-
+function customHash($password) {
+    return substr(hash('sha256', $password), 0, 15);
+}
 // Vérifier si le formulaire a été soumis
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Récupérer les données du formulaire
@@ -36,13 +38,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($user && password_verify($password, $user['MotDePasse'])) {
-        // Identifiants corrects, rediriger vers index.php
-        header('Location: index.php');
-        exit();
+    if ($user) {
+        $passwordMatch = (customHash($password) === $user['MotDePasse']);
+        if ($passwordMatch) {
+            // Vérifier le statut du compte
+            if ($user['Statut'] == 9) {
+                // Compte activé, rediriger vers annonces.php
+                session_start();
+                $_SESSION['user_id'] = $user['NoUtilisateur'];
+                header('Location: annonces.php');
+                exit();
+            } else {
+                $erreur = "Votre compte n'a pas encore été activé. Veuillez vérifier votre boîte de courriel pour le lien d'activation.";
+            }
+        } else {
+            $erreur = "Le mot de passe ne correspond pas. Détails de débogage";
+        }
     } else {
-        // Identifiants incorrects, afficher un message d'erreur
-        $erreur = "Email ou mot de passe incorrect.";
+        $erreur = "Aucun utilisateur trouvé avec cet email.";
     }
 
     // Fermer la connexion à la base de données
