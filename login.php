@@ -98,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <script>
     document.getElementById('btnSubmit').addEventListener('click', function() {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const passwordRegex = /^[a-z0-9]{5,15}$/;
+        const passwordRegex = /^[a-zA-Z0-9]{5,15}$/;
         const email = document.getElementById("email").value;
         const password = document.getElementById("password").value;
         let informationIsCorrect = true;

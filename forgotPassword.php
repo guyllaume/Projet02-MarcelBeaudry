@@ -46,7 +46,7 @@ function sendResetEmail($email, $token) {
         $mail->addAddress($email, 'New User'); // destinataire
         
         $mail->isHTML(true); // Set email format to HTML
-        $mail->Subject = "Réinitialisation de votre mot de passe"; // sujet
+        $mail->Subject = "Reinitialisation de votre mot de passe"; // sujet
         $mail->Body    = $message; // message
         $mail->AltBody = $message; // Alternative plain text body for non-HTML mail clients
     

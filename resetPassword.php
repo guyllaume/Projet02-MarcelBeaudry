@@ -23,6 +23,7 @@ function customHash($password) {
 }
 
 $message = '';
+$error = true;
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $email = $_GET['email'] ?? '';
@@ -47,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $token = $_POST['token'];
     $password = $_POST['password'];
     
-    if (preg_match('/^[a-z0-9]{5,15}$/', $password)) {
+    if (preg_match('/^[a-zA-Z0-9]{5,15}$/', $password)) {
         $conn = connectDB();
         $hashedPassword = customHash($password);
         $stmt = $conn->prepare("UPDATE utilisateurs SET MotDePasse = :password, ResetToken = NULL WHERE Courriel = :email AND ResetToken = :token");
@@ -57,6 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         
         if ($stmt->execute()) {
             $message = "Votre mot de passe a été réinitialisé avec succès.";
+            $error = false;
         } else {
             $message = "Une erreur est survenue lors de la réinitialisation du mot de passe.";
         }
@@ -67,8 +69,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 ?>
 
 <div class="contenu">
-    <?php if (!empty($message)) echo "<p class='message'>$message</p>"; ?>
-    <?php if (empty($message) || strpos($message, "n'est pas valide") !== false){ ?>
     <div class="card">
         <div class="card-header">
             <h1>Réinitialiser le mot de passe</h1>
@@ -86,12 +86,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                         </div>
                     </div>
                     <p class='<?php echo $error ? "error" : "success";?>'><?php echo empty($message) ? "&nbsp;" : $message;?></p>
-                    <button type="submit" class="large-button">Changer le mot de passe</button>
+                    <button type="button" id="btnSubmit" class="large-button">Changer le mot de passe</button>
                 </div>
             </form>
         </div>
     </div>
-    <?php }?>
 </div>
+
+<script>
+    document.getElementById('btnSubmit').addEventListener('click', function() {
+        const passwordRegex = /^[a-zA-Z0-9]{5,15}$/;
+        const password = document.getElementById("password").value;
+        if(!passwordRegex.test(password)) {
+            document.getElementById("errorPassword").innerHTML = "Le mot de passe doit contenir entre 5 et 15 caractères";
+            informationIsCorrect = false;
+        }else{
+            document.getElementById("errorPassword").innerHTML = "&nbsp;";
+            this.form.submit();
+        }
+    })
+</script>
 
 <?php require_once 'pied-page.php'; ?>
