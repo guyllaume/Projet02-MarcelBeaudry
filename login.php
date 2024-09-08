@@ -39,20 +39,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($user) {
-        $passwordMatch = (customHash($password) === $user['MotDePasse']);
+        // Première tentative : vérifier le mot de passe tel quel
+        if ($password === $user['MotDePasse']) {
+            $passwordMatch = true;
+        } else {
+            // Deuxième tentative : vérifier avec le hash
+            $passwordMatch = (customHash($password) === $user['MotDePasse']);
+        }
+    
         if ($passwordMatch) {
             // Vérifier le statut du compte
-            if ($user['Statut'] == 9) {
+            if ($user['Statut'] != 0) {
                 // Compte activé, rediriger vers annonces.php
-                session_start();
                 $_SESSION['user_id'] = $user['NoUtilisateur'];
+                $_SESSION['user_status'] = $user['Statut'];
+                $bIsConnected = true;
                 header('Location: annonces.php');
                 exit();
             } else {
                 $erreur = "Votre compte n'a pas encore été activé. Veuillez vérifier votre boîte de courriel pour le lien d'activation.";
             }
         } else {
-            $erreur = "Le mot de passe ne correspond pas. Détails de débogage";
+            $erreur = "Le mot de passe ne correspond pas.";
         }
     } else {
         $erreur = "Aucun utilisateur trouvé avec cet email.";
