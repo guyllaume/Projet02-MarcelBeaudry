@@ -49,6 +49,11 @@ button:hover{
     font-size: small;
     margin-left: 5px;
 }
+.success{
+    color: rgb(48, 168, 0);
+    font-size: small;
+    margin-left: 5px;
+}
 .input-group{
     display: flex;
     flex-direction: column;
