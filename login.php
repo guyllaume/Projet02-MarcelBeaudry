@@ -85,8 +85,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <input type="password" class="form-control" id="password" name="password" required>
                             <span class="error" id="errorPassword">&nbsp;</span>
                         </div>
-                        <a id="forgotPassword" href="forgotPassword.php">Mot de passe oublié?</a>
-                    <button type="button" id="btnSubmit">Submit</button>
                     </div>
                     <a id="forgotPassword" href="forgotPassword.php">Mot de passe oublié?</a>
                     <button type="submit" id="btnSubmit" class="btn btn-primary">Submit</button>
