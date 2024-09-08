@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
 <div class="contenu">
     <?php if (!empty($message)) echo "<p class='message'>$message</p>"; ?>
-    <?php if (empty($message) || strpos($message, "n'est pas valide") !== false): ?>
+    <?php if (empty($message) || strpos($message, "n'est pas valide") !== false){ ?>
     <div class="card">
         <div class="card-header">
             <h1>Réinitialiser le mot de passe</h1>
@@ -85,12 +85,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
                             <span class="error" id="errorPassword">&nbsp;</span>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary">Changer le mot de passe</button>
+                    <p class='<?php echo $error ? "error" : "success";?>'><?php echo empty($message) ? "&nbsp;" : $message;?></p>
+                    <button type="submit" class="large-button">Changer le mot de passe</button>
                 </div>
             </form>
         </div>
     </div>
-    <?php endif; ?>
+    <?php }?>
 </div>
 
 <?php require_once 'pied-page.php'; ?>

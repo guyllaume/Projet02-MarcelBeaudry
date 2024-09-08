@@ -1,0 +1,18 @@
+{
+    "name": "phpmailers/phpmailers",
+    "description": "mails email",
+    "autoload": {
+        "psr-4": {
+            "Phpmailers\\Phpmailers\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "guyllaume beaudry",
+            "email": "guyllaumebeaudry@gmail.com"
+        }
+    ],
+    "require": {
+        "phpmailer/phpmailer": "^6.9"
+    }
+}
