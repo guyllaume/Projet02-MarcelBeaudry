@@ -51,8 +51,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Vérifier le statut du compte
             if ($user['Statut'] != 0) {
                 // Compte activé, rediriger vers annonces.php
-                session_start();
                 $_SESSION['user_id'] = $user['NoUtilisateur'];
+                $_SESSION['user_status'] = $user['Statut'];
+                $bIsConnected = true;
                 header('Location: annonces.php');
                 exit();
             } else {
