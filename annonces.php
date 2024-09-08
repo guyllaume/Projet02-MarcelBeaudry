@@ -3,24 +3,38 @@ $strTitreApplication = 'Projet PHP';
 $strNomFichierCSS = 'style/annonces.css';
 require_once 'librairies-communes-2018-mm-jj.php';
 require_once 'en-tete.php';
+require_once 'classe-mysql.php';
+require_once '424x-cgodin-qc-ca.php';
+
+$mysql = new mysql("PJF_MARCELBEAUDRY", "424x-cgodin-qc-ca.php");
+$bdd = $mysql->cBD;
+
+// Vérifier si l'utilisateur est connecté
+if(!isset($_SESSION['user_id'])) {
+    header('Location: login.php');
+    exit;
+}
+
+// Récupérer les annonces
+$result = mysqli_query($bdd, "SELECT * FROM annonces ORDER BY Parution DESC LIMIT 10");
 
 ?>
     <div class="contenu top">
         <form action="annonces.php" method="post"></form>
             <div class="options">
                 <label for="ddlOrdre">Ordre par</label>
-                <select name="ddlOrdre" id="ddlOrdre">
+                <select name="ddlOrdre" id="ddlOrdre" onclick="this.form.submit()">
                     <option value="Asc">Ascendant</option>
                     <option value="Desc" selected>Descendant</option>
                 </select>
                 <label for="ddlOrdre">Trie par</label>
-                <select name="ddlTri" id="ddlTri">
+                <select name="ddlTri" id="ddlTri" onclick="this.form.submit()">
                     <option value="Date">Date de Parution</option>
                     <option value="Auteur">Auteur</option>
                     <option value="Categorie">Catégorie</option>
                 </select>
                 <label for="ddlOrdre">Nombre d'annonces</label>
-                <select name="ddlNbPages" id="ddlNbPages">
+                <select name="ddlNbPages" id="ddlNbPages" onclick="this.form.submit()">
                     <option value="5">5</option>
                     <option value="10" selected>10</option>
                     <option value="15">15</option>
@@ -31,7 +45,7 @@ require_once 'en-tete.php';
                     <img class="icon" src="photos-annonce/loupe.png" id="btnRecherche">
                 </div>
                 <label for="ddlOrdre">Pages</label>
-                <select name="ddlNoPage" id="ddlNoPage">
+                <select name="ddlNoPage" id="ddlNoPage" onclick="this.form.submit()">
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
@@ -44,76 +58,76 @@ require_once 'en-tete.php';
                 <img class="icon" id="btnLastPage" src="photos-annonce/last.png">
             </div>
         </form>
-        <div class="annonce-card"> <!--Affiche seulement les annonces ACTIF (1) -->
-            <img class="vignette" src="photos-annonce/manette.png"> <!-- src is from database -->
-            <h2>1-</h2> <!-- 1 needs to represent the index of the for loop -->
-            <div class="grow">
-                <h3>999</h3> <!-- 999 = NoAnnonce -->
-                <p><a class="afficherDescriptionComplete" >Ceci est une manette</a></p> <!-- DescriptionAbregee -->
-                <a href="contacter.php">Guyllaume Beaudry</a> <!-- nom prenom recu de NoUtilisateur  -->
-            </div>
-            <div class="right">
-                <h3>0000/00/00 00h00</h3> <!-- Parution  -->
-                <p>Électronique</p> <!-- description de categorie recu par NoCategorie  -->
-                <p class="price">3$</p> <!-- Prix  -->
-            </div>
-        </div>
-        <div class="annonce-card"> <!--Affiche seulement les annonces ACTIF (1) -->
-            <img class="vignette" src="photos-annonce/manette.png"> <!-- src is from database -->
-            <h2>1-</h2> <!-- 1 needs to represent the index of the for loop -->
-            <div class="grow">
-                <h3>999</h3> <!-- 999 = NoAnnonce -->
-                <p><a class="afficherDescriptionComplete" >Ceci est une manette</a></p> <!-- DescriptionAbregee -->
-                <a href="contacter.php">Guyllaume Beaudry</a> <!-- nom prenom recu de NoUtilisateur  -->
-            </div>
-            <div class="right">
-                <h3>0000/00/00 00h00</h3> <!-- Parution  -->
-                <p>Électronique</p> <!-- description de categorie recu par NoCategorie  -->
-                <p class="price">3$</p> <!-- Prix  -->
-            </div>
-        </div>
-        <div class="annonce-card"> <!--Affiche seulement les annonces ACTIF (1) -->
-            <img class="vignette" src="photos-annonce/manette.png"> <!-- src is from database -->
-            <h2>1-</h2> <!-- 1 needs to represent the index of the for loop -->
-            <div class="grow">
-                <h3>999</h3> <!-- 999 = NoAnnonce -->
-                <p><a class="afficherDescriptionComplete" >Ceci est une manette</a></p> <!-- DescriptionAbregee -->
-                <a href="contacter.php">Guyllaume Beaudry</a> <!-- nom prenom recu de NoUtilisateur  -->
-            </div>
-            <div class="right">
-                <h3>0000/00/00 00h00</h3> <!-- Parution  -->
-                <p>Électronique</p> <!-- description de categorie recu par NoCategorie  -->
-                <p class="price">3$</p> <!-- Prix  -->
-            </div>
-        </div>
-        <div class="annonce-card"> <!--Affiche seulement les annonces ACTIF (1) -->
-            <img class="vignette" src="photos-annonce/manette.png"> <!-- src is from database -->
-            <h2>1-</h2> <!-- 1 needs to represent the index of the for loop -->
-            <div class="grow">
-                <h3>999</h3> <!-- 999 = NoAnnonce -->
-                <p><a class="afficherDescriptionComplete" >Ceci est une manette</a></p> <!-- DescriptionAbregee -->
-                <a href="contacter.php">Guyllaume Beaudry</a> <!-- nom prenom recu de NoUtilisateur  -->
-            </div>
-            <div class="right">
-                <h3>0000/00/00 00h00</h3> <!-- Parution  -->
-                <p>Électronique</p> <!-- description de categorie recu par NoCategorie  -->
-                <p class="price">3$</p> <!-- Prix  -->
-            </div>
-        </div>
+        <?php
+        if($result){
+            $annonces = mysqli_fetch_all($result, MYSQLI_ASSOC);
+            $i = 1;
+            foreach ($annonces as $annonce) {
+                if($annonce['Etat'] == 1) {
+                    //userInfos
+                    $mysql->requete = "SELECT * FROM utilisateurs WHERE NoUtilisateur = ?";
+                    $stmt = mysqli_prepare($bdd, $mysql->requete);
+                    mysqli_stmt_bind_param($stmt, "i", $annonce['NoUtilisateur']);
+                    mysqli_stmt_execute($stmt);
+                    $resultUser = mysqli_stmt_get_result($stmt);
+                    $utilisateur = mysqli_fetch_assoc($resultUser);
+                    //categorieInfos
+                    $mysql->requete = "SELECT * FROM categories WHERE NoCategorie = ?";
+                    $stmt = mysqli_prepare($bdd, $mysql->requete);
+                    mysqli_stmt_bind_param($stmt, "i", $annonce['Categorie']);
+                    mysqli_stmt_execute($stmt);
+                    $resultCategorie = mysqli_stmt_get_result($stmt);
+                    $categorie = mysqli_fetch_assoc($resultCategorie);
+                ?>
+
+                <div class="annonce-card">
+                    <img class="vignette" src="<?php echo $annonce['Photo']; ?>">
+                    <h2><?php echo $i++; ?>-</h2> 
+                    <div class="grow">
+                        <h3><?php echo $annonce['NoAnnonce']; ?></h3> 
+                        <p><a class="afficherDescriptionComplete"
+                            data-img-src="<?php echo $annonce['Photo']; ?>"
+                            data-descriptionComplete="<?php echo $annonce['DescriptionComplete']; ?>"
+                            <?php
+                            if(str_ends_with($utilisateur['NoTelMaison'],"N")) {
+                                echo 'data-home-phone="privé"';
+                                echo 'data-travail-phone="privé"';
+                                echo 'data-cellulaire-phone="privé"';
+                            }else{
+                                echo 'data-home-phone="'.  substr($utilisateur['NoTelMaison'],0,-1).'"';
+                                echo 'data-travail-phone="'.  substr($utilisateur['NoTelTravail'],0,-1).'"';
+                                echo 'data-cellulaire-phone="'.  substr($utilisateur['NoTelCellulaire'],0,-1).'"';
+                            }
+                            ?>
+                            data-mise-a-jour="<?php echo $annonce['MiseAJour']; ?>"
+                        ><?php echo $annonce['DescriptionAbregee']; ?></a></p> 
+                        <a href="contacter.php"><?php echo $utilisateur['Prenom'] . ' ' . $utilisateur['Nom']; ?></a>
+                    </div>
+                    <div class="right">
+                        <h3><?php echo $annonce['Parution']; ?></h3>
+                        <p><?php echo $categorie['Description']; ?></p>
+                        <p class="price"><?php echo $annonce['Prix']; ?>$</p> 
+                    </div>
+                </div>
+                <?php
+                }
+            }
+        }
+        ?>
     </div>
     <div id="descriptionCompleteModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
             <div class="modalBody">
-                <img class="photoComplete" src="photos-annonce/manette.png">
+                <img id="modal-img" class="photoComplete" src="">
                 <h2>Description Complete</h2>
-                <p>Ceci est une manette avec plusieurs touche différentes. compatibles avec gamecube xbox et playstation</p>
+                <p id="modal-descriptionComplete"></p>
                 <div>
-                    <p>Téléphone Maison : (111) 222-3333</p>
-                    <p>Téléphone Travail : (111) 222-3333 #1111</p>
-                    <p>Téléphone Cellulaire : (111) 222-3333</p>
+                    <p id="modal-home-phone"></p>
+                    <p id="modal-travail-phone"></p>
+                    <p id="modal-cellulaire-phone"></p>
                 </div>
-                <div class="smallDate">Dernière Mise à Jour : 0000/00/00 00h00</div>
+                <div id="modal-mise-a-jour" class="smallDate"></div>
             </div>
             <div class="modalOptions">
                 <button id="btnFermer">Fermer</button>
@@ -136,6 +150,20 @@ require_once 'en-tete.php';
         // When the user clicks the button, open the modal
         for (let i = 0; i < btnsAfficherDescription.length; i++) {
             btnsAfficherDescription[i].addEventListener('click', function(){
+                let imgSrc = this.getAttribute('data-img-src');
+                let descriptionComplete = this.getAttribute('data-descriptionComplete');
+                let homePhone = this.getAttribute('data-home-phone');
+                let travailPhone = this.getAttribute('data-travail-phone');
+                let cellulairePhone = this.getAttribute('data-cellulaire-phone');
+                let miseAJour = this.getAttribute('data-mise-a-jour');
+
+                document.getElementById("modal-img").src = imgSrc;
+                document.getElementById("modal-descriptionComplete").innerHTML = descriptionComplete;
+                document.getElementById("modal-home-phone").innerHTML = 'Téléphone Maison : ' + homePhone;
+                document.getElementById("modal-travail-phone").innerHTML = 'Téléphone Travail : ' + travailPhone;
+                document.getElementById("modal-cellulaire-phone").innerHTML = 'Téléphone Cellulaire : ' + cellulairePhone;
+                document.getElementById("modal-mise-a-jour").innerHTML = 'Dernière Mise à Jour : ' + miseAJour;
+
                 modal.style.display = "block";
             });
         }
