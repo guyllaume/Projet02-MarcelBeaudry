@@ -23,6 +23,9 @@ if ($bIsConnected) {
     $stmt->execute();
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
     $email = $user['Courriel'];
+}else {
+    $email = $_GET['email'] ?? '';
+    $token = $_GET['token'] ?? '';
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -66,8 +69,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="card-body">
             <form action="resetPassword.php" method="post">
                 <?php if (!$bIsConnected): ?>
-                    <input type="hidden" name="email" value="<?php echo htmlspecialchars($email ?? ''); ?>">
-                    <input type="hidden" name="token" value="<?php echo htmlspecialchars($token ?? ''); ?>">
+                    <input type="hidden" name="email" value="<?php echo htmlspecialchars($email); ?>">
+                    <input type="hidden" name="token" value="<?php echo htmlspecialchars($token); ?>">
                 <?php endif; ?>
                 <div class="form-group">
                     <div class="form-subgroup">
@@ -85,7 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
                     </div>
                     <p class='<?php echo $error ? "error" : "success";?>'><?php echo $message;?></p>
-                    <button type="button" id="btnSubmit" class="large-button">Changer le mot de passe</button>
+                    <button type="submit" class="large-button">Changer le mot de passe</button>
                 </div>
             </form>
         </div>
@@ -93,7 +96,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </div>
 
 <script>
-    document.getElementById('btnSubmit').addEventListener('click', function() {
+    document.querySelector('form').addEventListener('submit', function(e) {
+        e.preventDefault();
         const passwordRegex = /^[a-zA-Z0-9]{5,15}$/;
         const password = document.getElementById("password").value;
         const confirmPassword = document.getElementById("confirmPassword").value;
@@ -114,9 +118,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if(informationIsCorrect) {
-            this.form.submit();
+            this.submit();
         }
-    })
+    });
 </script>
 
 <?php require_once 'pied-page.php'; ?>
