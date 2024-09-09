@@ -35,10 +35,10 @@ $bIsConnected = isset($_SESSION['user_id']);
             ?>
             <li><a href="annonces.php">Annonces</a></li>
             <li><a href="gestion.php">Gestionnaire</a></li>
+            <li><a href="profil.php">Profil</a></li>
             <?php
             }
             ?>
-            <li><a href="profil.php">Profil</a></li>
             <li><a href="logout.php">Déconnexion</a></li>
          <?php
          }
