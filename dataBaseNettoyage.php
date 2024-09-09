@@ -6,22 +6,12 @@ require_once 'librairies-communes-2018-mm-jj.php';
 require_once 'en-tete.php';
 require_once 'classe-mysql.php';
 require_once '424x-cgodin-qc-ca.php';
+require_once 'db_connect.php';
 
 // Vérifier si l'utilisateur est un administrateur
 if (!isset($_SESSION['user_status']) || $_SESSION['user_status'] != 1) {
     header('Location: index.php');
     exit();
-}
-
-function connectDB() {
-    global $strNomAdmin, $strMotPasseAdmin;
-    try {
-        $conn = new PDO("mysql:host=localhost;dbname=PJF_MARCELBEAUDRY", $strNomAdmin, $strMotPasseAdmin);
-        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        return $conn;
-    } catch(PDOException $e) {
-        die("Erreur de connexion : " . $e->getMessage());
-    }
 }
 
 $conn = connectDB();

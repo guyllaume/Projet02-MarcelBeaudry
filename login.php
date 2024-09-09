@@ -7,18 +7,8 @@ require_once 'librairies-communes-2018-mm-jj.php';
 require_once 'en-tete.php';
 require_once 'classe-mysql.php';
 require_once '424x-cgodin-qc-ca.php';
+require_once 'db_connect.php';
 
-// Fonction pour se connecter à la base de données
-function connectDB() {
-    global $strNomAdmin, $strMotPasseAdmin;
-    try {
-        $conn = new PDO("mysql:host=localhost;dbname=PJF_MARCELBEAUDRY", $strNomAdmin, $strMotPasseAdmin);
-        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        return $conn;
-    } catch(PDOException $e) {
-        die("Erreur de connexion : " . $e->getMessage());
-    }
-}
 function customHash($password) {
     return substr(hash('sha256', $password), 0, 15);
 }
