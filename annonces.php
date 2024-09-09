@@ -14,54 +14,94 @@ if(!isset($_SESSION['user_id'])) {
     header('Location: login.php');
     exit;
 }
+// Récupérer les parametres d'affichage des annonces
+if(isset($_POST['ddlOrdre']) && isset($_POST['ddlTri']) && isset($_POST['ddlNbAnnoncesParPage'])) {
+    $ordre = $_POST['ddlOrdre'];
+    $tri = $_POST['ddlTri'];
+    $nbAnnoncesParPage = $_POST['ddlNbAnnoncesParPage'];
+    $page = $_POST['ddlNoPage'];
+} else {
+    $ordre = "Desc";
+    $tri = "Parution";
+    $nbAnnoncesParPage = 10;
+    $page = 1;
+}
 
-// Récupérer les annonces
-$result = mysqli_query($bdd, "SELECT * FROM annonces ORDER BY Parution DESC LIMIT 10");
+// Calculer le nombre total d'annonces
+$result = mysqli_query($bdd, "SELECT * FROM annonces");
+$nbAnnoncesTotal = mysqli_num_rows($result);
+
+// Calculer le nombre total de pages
+$nbPages = ceil($nbAnnoncesTotal / $nbAnnoncesParPage);
+
+// Calculer le offset
+$offset = ($page - 1) * $nbAnnoncesParPage;
+
+if($tri == "Parution") {
+    $result = mysqli_query($bdd, "SELECT * FROM annonces ORDER BY $tri $ordre LIMIT $nbAnnoncesParPage OFFSET $offset");
+}else if($tri == "Auteur") {
+    $result = mysqli_query($bdd,
+     "SELECT a.*, u.prenom, u.nom
+      FROM annonces a
+      JOIN utilisateurs u 
+      ON a.NoUtilisateur = u.NoUtilisateur 
+      ORDER BY u.nom $ordre, u.prenom $ordre
+      LIMIT $nbAnnoncesParPage OFFSET $offset");
+}else{
+    $result = mysqli_query($bdd,
+     "SELECT a.*, c.description
+      FROM annonces a
+      JOIN categories c 
+      ON a.Categorie = c.NoCategorie 
+      ORDER BY c.description $ordre
+      LIMIT $nbAnnoncesParPage OFFSET $offset");
+}
 
 ?>
     <div class="contenu top">
-        <form action="annonces.php" method="post"></form>
-            <div class="options">
-                <label for="ddlOrdre">Ordre par</label>
-                <select name="ddlOrdre" id="ddlOrdre" onclick="this.form.submit()">
-                    <option value="Asc">Ascendant</option>
-                    <option value="Desc" selected>Descendant</option>
-                </select>
-                <label for="ddlOrdre">Trie par</label>
-                <select name="ddlTri" id="ddlTri" onclick="this.form.submit()">
-                    <option value="Date">Date de Parution</option>
-                    <option value="Auteur">Auteur</option>
-                    <option value="Categorie">Catégorie</option>
-                </select>
-                <label for="ddlOrdre">Nombre d'annonces</label>
-                <select name="ddlNbPages" id="ddlNbPages" onclick="this.form.submit()">
-                    <option value="5">5</option>
-                    <option value="10" selected>10</option>
-                    <option value="15">15</option>
-                    <option value="20">20</option>
-                </select>
-                <div class="grow center">
-                    <input type="text" id="txtRecherche" name="txtRecherche">
-                    <img class="icon" src="photos-annonce/loupe.png" id="btnRecherche">
-                </div>
-                <label for="ddlOrdre">Pages</label>
-                <select name="ddlNoPage" id="ddlNoPage" onclick="this.form.submit()">
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <!-- A generer avec le nombre d'annonces et le nb d'annonces par page-->
-                </select>
-                <img class="icon disabled" id="btnFirstPage" src="photos-annonce/first.png">
-                <img class="icon disabled" id="btnPrecedentPage" src="photos-annonce/precedent.png">
-                <img class="icon" id="btnNextPage" src="photos-annonce/next.png">
-                <img class="icon" id="btnLastPage" src="photos-annonce/last.png">
+        <form id="options" class="options" action="annonces.php" method="post">
+            <label for="ddlOrdre">Ordre par</label>
+            <select name="ddlOrdre" id="ddlOrdre" onchange="this.form.submit()">
+                <option value="Asc" <?php if($ordre == "Asc") echo "selected"?>>Ascendant</option>
+                <option value="Desc" <?php if($ordre == "Desc") echo "selected"?>>Descendant</option>
+            </select>
+            <label for="ddlTri">Trie par</label>
+            <select name="ddlTri" id="ddlTri" onchange="this.form.submit()">
+                <option value="Parution" <?php if($tri == "Parution") echo "selected"?>>Date de Parution</option>
+                <option value="Auteur" <?php if($tri == "Auteur") echo "selected"?>>Auteur</option>
+                <option value="Categorie" <?php if($tri == "Categorie") echo "selected"?>>Catégorie</option>
+            </select>
+            <label for="ddlNbAnnoncesParPage">Nombre d'annonces par page</label>
+            <select name="ddlNbAnnoncesParPage" id="ddlNbAnnoncesParPage" onchange="this.form.submit()">
+                <option value="5" <?php if($nbAnnoncesParPage == "5") echo "selected"?>>5</option>
+                <option value="10" <?php if($nbAnnoncesParPage == "10") echo "selected"?>>10</option>
+                <option value="15" <?php if($nbAnnoncesParPage == "15") echo "selected"?>>15</option>
+                <option value="20" <?php if($nbAnnoncesParPage == "20") echo "selected"?>>20</option>
+            </select>
+            <div class="grow center">
+                <input type="text" id="txtRecherche" name="txtRecherche">
+                <img class="icon" src="photos-annonce/loupe.png" id="btnRecherche">
             </div>
+            <label for="ddlNoPage">Pages</label>
+            <select name="ddlNoPage" id="ddlNoPage" onchange="this.form.submit()">
+                <?php
+                for($i = 1; $i <= $nbPages; $i++) {
+                    echo "<option value='$i'";
+                    if($page == $i) echo " selected";
+                    echo ">$i</option>";
+                }
+                ?>
+            </select>
+            <img class="icon <?php echo $page == 1 ? "disabled" : ""?>" id="btnFirstPage" src="photos-annonce/first.png">
+            <img class="icon <?php echo $page == 1 ? "disabled" : ""?>" id="btnPrecedentPage" src="photos-annonce/precedent.png">
+            <img class="icon <?php echo $page == $nbPages ? "disabled" : ""?>" id="btnNextPage" src="photos-annonce/next.png">
+            <img class="icon <?php echo $page == $nbPages ? "disabled" : ""?>" id="btnLastPage" src="photos-annonce/last.png">
         </form>
+        <div class="nbAnnonces"><?php echo "Nombre d'annonces total : " . $nbAnnoncesTotal?></div>
         <?php
         if($result){
             $annonces = mysqli_fetch_all($result, MYSQLI_ASSOC);
-            $i = 1;
+            $i = ($page - 1) * $nbAnnoncesParPage + 1;
             foreach ($annonces as $annonce) {
                 if($annonce['Etat'] == 1) {
                     //userInfos
@@ -106,7 +146,7 @@ $result = mysqli_query($bdd, "SELECT * FROM annonces ORDER BY Parution DESC LIMI
                     <div class="right">
                         <h3><?php echo $annonce['Parution']; ?></h3>
                         <p><?php echo $categorie['Description']; ?></p>
-                        <p class="price"><?php echo $annonce['Prix']; ?>$</p> 
+                        <p class="price"><?php echo $annonce['Prix'] == 0 ? "N/A" : $annonce['Prix']; ?>$</p> 
                     </div>
                 </div>
                 <?php
@@ -179,6 +219,38 @@ $result = mysqli_query($bdd, "SELECT * FROM annonces ORDER BY Parution DESC LIMI
         window.onclick = function(event) {
             if (event.target == modal) {
                 modal.style.display = "none";
+            }
+        }
+
+        let btnFirstPage = document.getElementById("btnFirstPage");
+        let btnPreviousPage = document.getElementById("btnPrecedentPage");
+        let btnNextPage = document.getElementById("btnNextPage");
+        let btnLastPage = document.getElementById("btnLastPage");
+        let ddlNoPage = document.getElementById("ddlNoPage");
+        let optionForm = document.getElementById("options");
+
+        btnFirstPage.onclick = function() {
+            if(ddlNoPage.value > 1){
+                ddlNoPage.value = 1;
+                optionForm.submit();
+            }
+        }
+        btnPreviousPage.onclick = function() {
+            if(ddlNoPage.value > 1){
+                ddlNoPage.value = ddlNoPage.value - 1;
+                optionForm.submit();
+            }
+        }
+        btnNextPage.onclick = function() {
+            if(ddlNoPage.value < <?php echo $nbPages;?>){
+                ddlNoPage.value = parseInt(ddlNoPage.value) + 1;
+                optionForm.submit();
+            }
+        }
+        btnLastPage.onclick = function() {
+            if(ddlNoPage.value < <?php echo $nbPages;?>){
+                ddlNoPage.value = <?php echo $nbPages;?>;
+                optionForm.submit();
             }
         }
     </script>
