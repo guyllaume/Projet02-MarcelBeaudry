@@ -84,6 +84,7 @@ if($tri == "Parution") {
             <div class="grow center">
                 <input type="text" id="txtRecherche" name="txtRecherche">
                 <img class="icon" src="photos-annonce/loupe.png" id="btnRecherche">
+                <div id="resultatsRecherche" class="resultats-recherche"></div>
             </div>
             <label for="ddlNoPage">Pages</label>
             <select name="ddlNoPage" id="ddlNoPage" onchange="this.form.submit()">
@@ -270,7 +271,113 @@ if($tri == "Parution") {
             }
         }
     </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+    console.log("Script de recherche chargé");
+    const txtRecherche = document.getElementById('txtRecherche');
+    const resultatsRecherche = document.getElementById('resultatsRecherche');
 
+    txtRecherche.addEventListener('input', function() {
+        console.log("Valeur de recherche:", this.value);
+        if (this.value.length >= 3) {
+            console.log("Envoi de la requête à barRecherche.php");
+            fetch(`barRecherche.php?query=${encodeURIComponent(this.value)}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Données reçues:", data);
+                    afficherResultats(data);
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                });
+        } else {
+            resultatsRecherche.innerHTML = '';
+            resultatsRecherche.style.display = 'none';
+        }
+    });
+
+    function afficherResultats(data) {
+        resultatsRecherche.innerHTML = '';
+        if (data.length === 0) {
+            resultatsRecherche.innerHTML = '<div>Aucun résultat trouvé</div>';
+        } else {
+            data.forEach(item => {
+                const div = document.createElement('div');
+                div.textContent = item.DescriptionAbregee;
+                div.addEventListener('click', () => afficherAnnonce(item));
+                resultatsRecherche.appendChild(div);
+            });
+        }
+        resultatsRecherche.style.display = 'block';
+        console.log("Résultats affichés");
+    }
+
+    // Fermer les résultats quand on clique en dehors
+    document.addEventListener('click', function(e) {
+        if (e.target !== txtRecherche && !resultatsRecherche.contains(e.target)) {
+            resultatsRecherche.style.display = 'none';
+        }
+    });
+
+    function afficherAnnonce(annonce) {
+        let modal = document.getElementById("descriptionCompleteModal");
+        document.getElementById("modal-img").src = annonce.Photo;
+        document.getElementById("modal-descriptionComplete").innerHTML = annonce.DescriptionComplete;
+        // Ajoutez d'autres détails si nécessaire
+        modal.style.display = "block";
+        resultatsRecherche.style.display = 'none'; // Cacher les résultats après sélection
+    }
+    });
+    txtRecherche.addEventListener('input', function() {
+        console.log("Valeur de recherche:", this.value);
+        if (this.value.length >= 3) {
+                console.log("Envoi de la requête à barRecherche.php");
+                fetch(`barRecherche.php?query=${encodeURIComponent(this.value)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log("Données reçues:", data);
+                        afficherResultats(data);
+                    })
+                    .catch(error => {
+                        console.error('Erreur:', error);
+                    });
+            } else {
+                resultatsRecherche.innerHTML = '';
+                resultatsRecherche.style.display = 'none';
+            }
+    });
+
+    function afficherResultats(data) {
+        resultatsRecherche.innerHTML = '';
+        if (data.length === 0) {
+            resultatsRecherche.innerHTML = '<div>Aucun résultat trouvé</div>';
+        } else {
+            data.forEach(item => {
+                const div = document.createElement('div');
+                div.textContent = item.DescriptionAbregee;
+                div.addEventListener('click', () => afficherAnnonce(item));
+                resultatsRecherche.appendChild(div);
+            });
+        }
+        resultatsRecherche.style.display = 'block';
+        console.log("Résultats affichés");
+    }
+
+    document.addEventListener('click', function(e) {
+        if (e.target !== txtRecherche && !resultatsRecherche.contains(e.target)) {
+            resultatsRecherche.style.display = 'none';
+        }
+    });
+
+    function afficherAnnonce(annonce) {
+    let modal = document.getElementById("descriptionCompleteModal");
+    document.getElementById("modal-img").src = annonce.Photo;
+    document.getElementById("modal-descriptionComplete").innerHTML = annonce.DescriptionComplete;
+    // Ajoutez d'autres détails si nécessaire
+    modal.style.display = "block";
+    resultatsRecherche.style.display = 'none'; // Cacher les résultats après sélection
+    }
+</script>
 <?php
 require_once 'pied-page.php';
 
