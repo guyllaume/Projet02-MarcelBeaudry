@@ -10,8 +10,6 @@ require_once 'en-tete.php';
 require_once 'classe-mysql.php';
 require_once '424x-cgodin-qc-ca.php';
 
-// Fonction pour se connecter à la base de données - retiré inutile
-
 function sendConfirmationEmail($email, $token) {
     // Envoi d'un email de confirmation
     $mail = new PHPMailer(true);
