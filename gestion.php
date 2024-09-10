@@ -48,10 +48,11 @@ if($tri == "Categorie") {
       FROM annonces a
       JOIN categories c 
       ON a.Categorie = c.NoCategorie 
+      WHERE NoUtilisateur = " . $_SESSION['user_id'] . "
       ORDER BY c.description $ordre
       LIMIT $nbAnnoncesParPage OFFSET $offset");
 }else{
-    $result = mysqli_query($bdd, "SELECT * FROM annonces ORDER BY $tri $ordre LIMIT $nbAnnoncesParPage OFFSET $offset");
+    $result = mysqli_query($bdd, "SELECT * FROM annonces WHERE NoUtilisateur = " . $_SESSION['user_id'] . " ORDER BY $tri $ordre LIMIT $nbAnnoncesParPage OFFSET $offset");
 }
 
 ?>
@@ -83,7 +84,7 @@ if($tri == "Categorie") {
             <img class="icon <?php echo $page == 1 ? "disabled" : ""?>" id="btnPrecedentPage" src="photos-annonce/precedent.png">
             <img class="icon <?php echo $page == $nbPages ? "disabled" : ""?>" id="btnNextPage" src="photos-annonce/next.png">
             <img class="icon <?php echo $page == $nbPages ? "disabled" : ""?>" id="btnLastPage" src="photos-annonce/last.png">
-            <button class="ajouterAnnonce" id="btnAjouterAnnonce">Ajouter Annonce</button>
+            <button type="button" class="ajouterAnnonce" id="btnAjouterAnnonce">Ajouter Annonce</button>
         </form>
         <div class="nbAnnonces"><?php echo "Nombre d'annonces total : " . $nbAnnoncesTotal?></div>
         <?php
