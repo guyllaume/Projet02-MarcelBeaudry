@@ -136,7 +136,7 @@ if($tri == "Categorie") {
                 <p class="price"><?php echo $annonce['Prix'] == 0 ? "N/A" : $annonce['Prix']; ?>$</p>
                 <div class="bottomOptions">
                     <span class="smallDate">Dernière Mise À Jour <?php echo $annonce['MiseAJour']; ?></span>
-                    <button class="btnModifier">Modifier</button>
+                    <button class="btnModifier" data-noAnnonce="<?php echo $annonce['NoAnnonce']; ?>">Modifier</button>
                     <button class="btnRetirer" data-noAnnonce="<?php echo $annonce['NoAnnonce']; ?>">Retirer</button>
                     <div class="center top">
                         <span><?php echo $annonce['Etat'] == 1 ? "Actif" : ($annonce['Etat'] == 2 ? "Inactif" : "Retiré"); ?></span> 
@@ -153,6 +153,9 @@ if($tri == "Categorie") {
     <form id="annonceForm" method="POST" action="gestion.php">
         <input type="hidden" id="noAnnonce" name="noAnnonce" value="">
         <input type="hidden" id="changeEtat" name="changeEtat"  value="">
+    </form>
+    <form id="modifierForm" method="POST" action="modifierAnnonce.php">
+        <input type="hidden" id="NoAnnonceToModify" name="NoAnnonceToModify" value="">
     </form>
     <div id="descriptionCompleteModal" class="modal">
         <div class="modal-content">
@@ -195,10 +198,12 @@ if($tri == "Categorie") {
         let btnEtat = document.getElementsByClassName("btnEtat");
         let hiddenChangeEtat = document.getElementById("changeEtat");
         let hiddenNoAnnonce = document.getElementById("noAnnonce");
+        let hiddenNoAnnonceToModify = document.getElementById("NoAnnonceToModify");
         let btnConfirmRetirer = document.getElementById("btnConfirmRetirer"); //Devrait envoyer un post avec le NoAnnonce a retirer
         let btnCancelRetirer = document.getElementById("btnCancelRetirer");
         let btnAjouterAnnonce = document.getElementById("btnAjouterAnnonce");
         let annonceForm = document.getElementById("annonceForm");
+        let modifierForm = document.getElementById("modifierForm");
 
         let btnsAfficherDescription = document.getElementsByClassName("afficherDescriptionComplete");
         let btnFermer = document.getElementById("btnFermer");
@@ -259,7 +264,9 @@ if($tri == "Categorie") {
         }
         for (let i = 0; i < btnModifier.length; i++) {
             btnModifier[i].onclick = function() {
-                window.location.href = "modifierAnnonce.php";
+                let noAnnonce = this.getAttribute('data-noAnnonce');
+                hiddenNoAnnonceToModify.value = noAnnonce;
+                modifierForm.submit();
             }
         }
         btnAjouterAnnonce.onclick = function() {
