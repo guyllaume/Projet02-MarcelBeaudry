@@ -2,11 +2,45 @@
 $strTitreApplication = 'Projet PHP';
 $strNomFichierCSS = 'style/profil.css';
 //SI UTILISATEUR CONNECTE MAIS PAS DE PROFIL ON REDIRIGE VERS LA PAGE DE PROFIL
+// verirfier nom et prenom avant de rediriger. exclure admin == 1
 require_once 'librairies-communes-2018-mm-jj.php';
 require_once 'en-tete.php';
+require_once 'classe-mysql.php';
+require_once '424x-cgodin-qc-ca.php';
+require_once 'db_connect.php';
+
+$conn = connectDB();
+
+// Traitement du formulaire
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $userId = $_SESSION['user_id'];
+    $statut = $_POST['statut'];
+    $noEmpl = $_POST['noEmpl'];
+    $nom = $_POST['nom'];
+    $prenom = $_POST['prenom'];
+    $noTelMaison = $_POST['noTelMaison'];
+    $noTeltravail = $_POST['noTeltravail'];
+    $noTelCellulaire = $_POST['noTelCellulaire'];
+    $access = $_POST['access'];
+    $info = $_POST['info'];
+
+    $query = "UPDATE utilisateurs SET Statut = ?, NoEmpl = ?, Nom = ?, Prenom = ?, NoTelMaison = ?, NoTelTravail = ?, NoTelCellulaire = ?, AutresInfos = ?, Modification = NOW() WHERE NoUtilisateur = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->execute([$statut, $noEmpl, $nom, $prenom, $noTelMaison, $noTeltravail, $noTelCellulaire, $info, $userId]);
+
+    $message = "Profil mis à jour avec succès.";
+}
+
+// Récupération des données actuelles de l'utilisateur
+$userId = $_SESSION['user_id'];
+$query = "SELECT * FROM utilisateurs WHERE NoUtilisateur = ?";
+$stmt = $conn->prepare($query);
+$stmt->execute([$userId]);
+$user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 ?>
 <div class="contenu">
+    <?php if (isset($message)) echo "<p class='message'>$message</p>"; ?>
     <form class="profil-form" action="profil.php" method="post">
         <div class="profil-card">
             <h1>Profil</h1>
@@ -113,7 +147,7 @@ require_once 'en-tete.php';
             errorMessage.innerHTML = "Le numéro de telephone de travail est invalide";
             return;
         }
-        if(noTelCellulaire.length > 0 && !phoneWithPosteRegex.test(noTelCellulaire)) {
+        if(noTelCellulaire.length > 0 && !phoneRegex.test(noTelCellulaire)) {
             errorMessage.innerHTML = "Le numéro de telephone cellulaire est invalide";
             return;
         }
