@@ -32,9 +32,6 @@ if(isset($_POST['ddlOrdre']) && isset($_POST['ddlTri']) && isset($_POST['ddlNoPa
 }
 $nbAnnoncesParPage = 10;
 
-//USED FOR TESTING ONLY
-$_SESSION['user_id'] = 4; //NEED TO REMOVE BEFORE PUSH
-
 // Calculer le nombre total d'annonces
 $result = mysqli_query($bdd, "SELECT * FROM annonces WHERE NoUtilisateur = " . $_SESSION['user_id']);
 $nbAnnoncesTotal = mysqli_num_rows($result);
