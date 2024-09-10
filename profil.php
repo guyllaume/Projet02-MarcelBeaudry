@@ -1,5 +1,4 @@
 <?php
-$strTitreApplication = 'Projet PHP';
 $strNomFichierCSS = 'style/profil.css';
 //SI UTILISATEUR CONNECTE MAIS PAS DE PROFIL ON REDIRIGE VERS LA PAGE DE PROFIL
 // verirfier nom et prenom avant de rediriger. exclure admin == 1

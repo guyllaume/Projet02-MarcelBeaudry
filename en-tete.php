@@ -29,7 +29,7 @@ if ($bIsConnected) {
 }
 ?>
 <head>
-   <title><?php echo $strTitreApplication; ?></title>
+   <title>Petites annonces GG</title>
    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
    <link rel="stylesheet" type="text/css" href="style/style.css" />
    <link rel="stylesheet" type="text/css" href="<?php echo $strNomFichierCSS; ?>" />
@@ -37,7 +37,7 @@ if ($bIsConnected) {
 <body>
 <div class="container">
    <nav id="navEnTete">
-      <?php echo $strTitreApplication; ?>
+      Petites annonces GG
       <ul id="navList">
          <?php
          if(!$bIsConnected) {
