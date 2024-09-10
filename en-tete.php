@@ -2,6 +2,31 @@
 <?php
 session_start();
 $bIsConnected = isset($_SESSION['user_id']);
+
+if ($bIsConnected) {
+    require_once 'classe-mysql.php';
+    require_once '424x-cgodin-qc-ca.php';
+    require_once 'db_connect.php';
+
+    $conn = connectDB();
+    
+    $query = "SELECT Statut, Nom, Prenom FROM utilisateurs WHERE NoUtilisateur = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->execute([$_SESSION['user_id']]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($user) {
+        $_SESSION['user_status'] = $user['Statut'];
+        if (empty($user['Nom']) || empty($user['Prenom'])) {
+            $currentPage = basename($_SERVER['PHP_SELF']);
+            if ($currentPage != 'profil.php' && $user['Statut'] != 1) {
+               error_log("Redirection vers profil.php pour l'utilisateur ID: " . $_SESSION['user_id']);
+               header('Location: profil.php');
+               exit();
+            }
+        }
+    }
+}
 ?>
 <head>
    <title><?php echo $strTitreApplication; ?></title>
