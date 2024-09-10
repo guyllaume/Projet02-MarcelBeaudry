@@ -36,6 +36,7 @@ $nbAnnoncesTotal = mysqli_num_rows($result);
 
 // Calculer le nombre total de pages
 $nbPages = ceil($nbAnnoncesTotal / $nbAnnoncesParPage);
+if($nbPages == 0) $nbPages = 1; // Assure qu'il y a au moins une page
 
 // Calculer le offset
 $offset = ($page - 1) * $nbAnnoncesParPage;
