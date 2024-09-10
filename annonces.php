@@ -141,7 +141,7 @@ if($tri == "Parution") {
                             ?>
                             data-mise-a-jour="<?php echo $annonce['MiseAJour']; ?>"
                         ><?php echo $annonce['DescriptionAbregee']; ?></a></p> 
-                        <a href="contacter.php"><?php echo $utilisateur['Prenom'] . ' ' . $utilisateur['Nom']; ?></a>
+                        <a class="<?php echo $utilisateur['NoUtilisateur'] == $_SESSION["user_id"] ? "" : "sendUserId";?>" data-id="<?php echo $utilisateur['NoUtilisateur']; ?>"><?php echo $utilisateur['Prenom'] . ' ' . $utilisateur['Nom']; ?></a>
                     </div>
                     <div class="right">
                         <h3><?php echo $annonce['Parution']; ?></h3>
@@ -155,6 +155,9 @@ if($tri == "Parution") {
         }
         ?>
     </div>
+    <form id="contacterForm" method="POST" action="contacter.php">
+        <input type="hidden" id="userToContact_id" name="userToContact_id" value="">
+    </form>
     <div id="descriptionCompleteModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
@@ -182,11 +185,21 @@ if($tri == "Parution") {
 
         // Get the button that opens the modal - change for class eventually
         let btnsAfficherDescription = document.getElementsByClassName("afficherDescriptionComplete");
-        let btnFermer = document.getElementById("btnFermer"); //Devrait envoyer un post avec le NoAnnonce a retirer
+        let btnFermer = document.getElementById("btnFermer");
 
         // Get the <span> element that closes the modal
         let span = document.getElementsByClassName("close")[0];
 
+        let contactForm =document.getElementById("contacterForm");
+        let userToContact_id = document.getElementById("userToContact_id");
+        let sendUserId = document.getElementsByClassName("sendUserId");
+
+        for (let i = 0; i < sendUserId.length; i++) {
+            sendUserId[i].addEventListener('click', function(){
+                userToContact_id.value = this.getAttribute('data-id');
+                contactForm.submit();
+            });
+        }
         // When the user clicks the button, open the modal
         for (let i = 0; i < btnsAfficherDescription.length; i++) {
             btnsAfficherDescription[i].addEventListener('click', function(){
