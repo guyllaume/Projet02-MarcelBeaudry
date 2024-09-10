@@ -1,7 +1,6 @@
 <?php
 $strTitreApplication = 'Projet PHP';
 $strNomFichierCSS = 'style/profil.css';
-$bIsConnected = true; // VÉRIFIE SI L'UTILISATEUR EST CONNECTÉ
 //SI UTILISATEUR CONNECTE MAIS PAS DE PROFIL ON REDIRIGE VERS LA PAGE DE PROFIL
 require_once 'librairies-communes-2018-mm-jj.php';
 require_once 'en-tete.php';
