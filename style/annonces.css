@@ -144,6 +144,14 @@ button:hover{
     font-style: italic;
     color: #70BCFF;
 }
+.nbAnnonces{
+    font-style: italic;
+    font-weight: bold;
+    font-size: larger;
+    color: #0069CC;
+    align-self: start;
+    margin-left: 100px;
+}
 /* Modal container - hidden by default */
 .modal {
     display: none; /* Hidden by default */

@@ -1,8 +1,6 @@
 <?php
 $strTitreApplication = 'Projet PHP';
 $strNomFichierCSS = 'style/loginSignup.css';
-// Inclure les fichiers nécessaires
-$bIsConnected = false; // VÉRIFIE SI L'UTILISATEUR EST CONNECTÉ
 require_once 'librairies-communes-2018-mm-jj.php';
 require_once 'en-tete.php';
 require_once 'classe-mysql.php';
@@ -43,7 +41,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Compte activé, rediriger vers annonces.php
                 $_SESSION['user_id'] = $user['NoUtilisateur'];
                 $_SESSION['user_status'] = $user['Statut'];
-                $bIsConnected = true;
                 header('Location: annonces.php');
                 exit();
             } else {
@@ -113,7 +110,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             document.getElementById("errorPassword").innerHTML = "&nbsp;";
         }
         if(informationIsCorrect) {
-            //window.location.href = "annonces.php";
             this.form.submit();
         }
     })
