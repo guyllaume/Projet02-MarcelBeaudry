@@ -37,7 +37,10 @@ if ($bIsConnected) {
 <body>
 <div class="container">
    <nav id="navEnTete">
-      Petites annonces GG
+      <div class="logo-container">
+         <img class="logo" src="photos-annonce/logo.jpeg" />
+         <span class="titre">Petites annonces GG</span>
+      </div>
       <ul id="navList">
          <?php
          if(!$bIsConnected) {

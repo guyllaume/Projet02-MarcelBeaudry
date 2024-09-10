@@ -128,3 +128,18 @@ body{
         font-size: 0.8em;
     }
 }
+
+.titre{
+    font-size: 1.75rem;
+    font-weight: bold;
+    color: #0069CC;
+}
+.logo{
+    width: 80px;
+    border-radius: 50%;
+}
+.logo-container{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
