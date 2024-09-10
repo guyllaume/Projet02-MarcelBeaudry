@@ -1,5 +1,5 @@
 <?php
    // --- Établissement de la connexion avec mySQL
    $strNomAdmin = "root";
-   $strMotPasseAdmin = "";
+   $strMotPasseAdmin = "jnmpdtdmj13!";
 ?>
