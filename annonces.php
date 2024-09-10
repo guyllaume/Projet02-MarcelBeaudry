@@ -89,7 +89,7 @@ if($tri == "Parution") {
             </select>
             <div class="grow center">
                 <input type="text" id="txtRecherche" name="txtRecherche">
-                <img class="icon" src="photos-annonce/loupe.png" id="btnRecherche">
+                <img class="icon" src="images/loupe.png" id="btnRecherche">
             </div>
             <label for="ddlNoPage">Pages</label>
             <select name="ddlNoPage" id="ddlNoPage" onchange="this.form.submit()">
@@ -101,10 +101,10 @@ if($tri == "Parution") {
                 }
                 ?>
             </select>
-            <img class="icon <?php echo $page == 1 ? "disabled" : ""?>" id="btnFirstPage" src="photos-annonce/first.png">
-            <img class="icon <?php echo $page == 1 ? "disabled" : ""?>" id="btnPrecedentPage" src="photos-annonce/precedent.png">
-            <img class="icon <?php echo $page == $nbPages ? "disabled" : ""?>" id="btnNextPage" src="photos-annonce/next.png">
-            <img class="icon <?php echo $page == $nbPages ? "disabled" : ""?>" id="btnLastPage" src="photos-annonce/last.png">
+            <img class="icon <?php echo $page == 1 ? "disabled" : ""?>" id="btnFirstPage" src="images/first.png">
+            <img class="icon <?php echo $page == 1 ? "disabled" : ""?>" id="btnPrecedentPage" src="images/precedent.png">
+            <img class="icon <?php echo $page == $nbPages ? "disabled" : ""?>" id="btnNextPage" src="images/next.png">
+            <img class="icon <?php echo $page == $nbPages ? "disabled" : ""?>" id="btnLastPage" src="images/last.png">
         </form>
         <div class="nbAnnonces"><?php echo "Nombre d'annonces total : " . $nbAnnoncesTotal?></div>
         <?php

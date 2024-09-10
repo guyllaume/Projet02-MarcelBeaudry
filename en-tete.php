@@ -38,7 +38,7 @@ if ($bIsConnected) {
 <div class="container">
    <nav id="navEnTete">
       <div class="logo-container">
-         <img class="logo" src="photos-annonce/logo.jpeg" />
+         <img class="logo" src="images/logo.jpeg" />
          <span class="titre">Petites annonces GG</span>
          <?php if($bIsConnected && !empty($user['Nom']) && !empty($user['Prenom'])) { echo '<span class="user-connected">Bonjour ' . $user['Prenom'] . ' ' . $user['Nom'] . '</span>'; }?>
       </div>

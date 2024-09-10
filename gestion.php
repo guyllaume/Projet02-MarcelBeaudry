@@ -80,10 +80,10 @@ if($tri == "Categorie") {
                 }
                 ?>
             </select>
-            <img class="icon <?php echo $page == 1 ? "disabled" : ""?>" id="btnFirstPage" src="photos-annonce/first.png">
-            <img class="icon <?php echo $page == 1 ? "disabled" : ""?>" id="btnPrecedentPage" src="photos-annonce/precedent.png">
-            <img class="icon <?php echo $page == $nbPages ? "disabled" : ""?>" id="btnNextPage" src="photos-annonce/next.png">
-            <img class="icon <?php echo $page == $nbPages ? "disabled" : ""?>" id="btnLastPage" src="photos-annonce/last.png">
+            <img class="icon <?php echo $page == 1 ? "disabled" : ""?>" id="btnFirstPage" src="images/first.png">
+            <img class="icon <?php echo $page == 1 ? "disabled" : ""?>" id="btnPrecedentPage" src="images/precedent.png">
+            <img class="icon <?php echo $page == $nbPages ? "disabled" : ""?>" id="btnNextPage" src="images/next.png">
+            <img class="icon <?php echo $page == $nbPages ? "disabled" : ""?>" id="btnLastPage" src="images/last.png">
             <button type="button" class="ajouterAnnonce" id="btnAjouterAnnonce">Ajouter Annonce</button>
         </form>
         <div class="nbAnnonces"><?php echo "Nombre d'annonces total : " . $nbAnnoncesTotal?></div>
