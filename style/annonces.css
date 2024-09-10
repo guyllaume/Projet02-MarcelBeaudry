@@ -32,6 +32,11 @@
     font-size: small;
     margin-left: 5px;
 }
+.success{
+    color: rgb(48, 168, 0);
+    font-size: small;
+    margin-left: 5px;
+}
 .ajouter-annonce-form{
     display: flex;
     justify-content: center;
@@ -42,6 +47,11 @@
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
     margin: -20px;
+    margin-right: 10px;
+}
+.previewImage{
+    width: 144px;
+    border-radius: 20px;
     margin-right: 10px;
 }
 h1{

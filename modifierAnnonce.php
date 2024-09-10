@@ -4,45 +4,173 @@ $strNomFichierCSS = 'style/annonces.css';
 require_once 'librairies-communes-2018-mm-jj.php';
 require_once 'en-tete.php';
 
+$message = '&nbsp;';
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if(isset($_POST['descriptionAbregee'], $_POST['descriptionComplete'], $_POST['categorie'], $_POST['prix'], $_POST['etat'], $_POST['NoAnnonceToModify'])) {
+
+        $descriptionAbregee = $_POST['descriptionAbregee'];
+        $descriptionComplete = $_POST['descriptionComplete'];
+        $categ = $_POST['categorie'];
+        $prix = $_POST['prix'];
+        $etat = $_POST['etat'];
+        $user_id = $_SESSION['user_id'];
+        $NoAnnonceToModify = $_POST['NoAnnonceToModify'];
+    
+        if(isset($_FILES['fileToUpload']) && $_FILES['fileToUpload']['error'] == UPLOAD_ERR_OK) {
+            // Upload de l'image dans le dossier photos-annonce
+            $targetDir = "photos-annonce/";
+
+            // Creation du dossier si inexistant
+            if (!file_exists($targetDir)) {
+                mkdir($targetDir, 0777, true);
+            }
+
+            // Création du chemin relatif de l'image
+            $targetFile = $targetDir . basename($_FILES["fileToUpload"]["name"]);
+            $uploadOk = 1; // check if upload is ok
+
+            // Vérification du type de l'image
+            $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
+            if ($check !== false) {
+                $message = "Le fichier est une image - " . $check["mime"] . ".";
+                $uploadOk = 1;
+            } else {
+                $message = "Le fichier n'est pas une image.";
+                $uploadOk = 0;
+            }
+
+             // Check file size (limit set to 5MB in this example)
+            if ($_FILES["fileToUpload"]["size"] > 5000000) {
+                $message = "Désolez, le fichier est trop volumineux.";
+                $uploadOk = 0;
+            }
+
+             // Check if everything is okay before uploading
+            if ($uploadOk == 1) {
+                if (!move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $targetFile)) {
+                    $message = "Désolez, une erreur s'est produite lors de l'upload.";
+                }else{
+                    $conn = connectDB();
+
+                    $stmt = $conn->prepare("UPDATE annonces 
+                                            SET DescriptionAbregee = ?, 
+                                                DescriptionComplete = ?, 
+                                                Categorie = ?, 
+                                                Prix = ?, 
+                                                Photo = ?, 
+                                                Etat = ?, 
+                                                MiseAJour = NOW() 
+                                            WHERE NoAnnonce = ?");
+
+                    $stmt->bindParam(1, $descriptionAbregee);
+                    $stmt->bindParam(2, $descriptionComplete);
+                    $stmt->bindParam(3, $categ);
+                    $stmt->bindParam(4, $prix);
+                    $stmt->bindParam(5, $targetFile);
+                    $stmt->bindParam(6, $etat);
+                    $stmt->bindParam(7, $NoAnnonceToModify);
+                    $stmt->execute();
+                    if ($stmt->rowCount() > 0) {
+                        $message = "Modification effectuée avec succès";
+                    } else {
+                        $message = "Aucune modification n'a été effectuée.";
+                    }
+                    $conn = null;
+                }
+            }
+        }else{
+            $conn = connectDB();
+
+            $stmt = $conn->prepare("UPDATE annonces 
+                                    SET DescriptionAbregee = ?, 
+                                        DescriptionComplete = ?, 
+                                        Categorie = ?, 
+                                        Prix = ?, 
+                                        Etat = ?, 
+                                        MiseAJour = NOW() 
+                                    WHERE NoAnnonce = ?");
+
+            $stmt->bindParam(1, $descriptionAbregee);
+            $stmt->bindParam(2, $descriptionComplete);
+            $stmt->bindParam(3, $categ);
+            $stmt->bindParam(4, $prix);
+            $stmt->bindParam(5, $etat);
+            $stmt->bindParam(6, $NoAnnonceToModify);
+            $stmt->execute();
+            $conn = null;
+            if ($stmt->rowCount() > 0) {
+                $message = "Modification effectuée avec succès";
+            } else {
+                $message = "Aucune modification n'a été effectuée.";
+            }
+        }
+    }else if(isset($_POST['NoAnnonceToModify'])) {
+        $NoAnnonceToModify = $_POST['NoAnnonceToModify'];
+    }else{
+        $message = 'Probleme de requete serveur';
+    }
+}
+
+// Affichage de la page
+$conn = connectDB();
+$stmt = $conn->prepare("SELECT * FROM annonces WHERE NoAnnonce = ?");
+$stmt->bindParam(1, $NoAnnonceToModify);
+$stmt->execute();
+$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$rowAnnonce = $result[0];
+$conn = null;
+
 ?>
 <div class="contenu">
-    <form class="ajouter-annonce-form" action="ajouterAnnonce.php" method="post">
+    <form class="ajouter-annonce-form" action="modifierAnnonce.php" method="post" enctype="multipart/form-data">
         <div class="ajouter-annonce-card">
             <h1>Modifier une Annonce</h1>
             <div>
                 <label for="descriptionAbregee">Description Abrégée</label>
-                <textarea rows="2" cols="50" maxlength="50" name="descriptionAbregee" id="descriptionAbregee" required></textarea>
+                <textarea rows="2" cols="50" maxlength="50" name="descriptionAbregee" id="descriptionAbregee" required><?php echo $rowAnnonce['DescriptionAbregee'];?></textarea>
             </div>
             <div>
                 <label for="descriptionComplete">Description Complète</label>
-                <textarea rows="5" cols="50" maxlength="250" name="descriptionComplete" id="descriptionComplete" required></textarea>
+                <textarea rows="5" cols="50" maxlength="250" name="descriptionComplete" id="descriptionComplete" required><?php echo $rowAnnonce['DescriptionComplete'];?></textarea>
             </div>
             <div>
                 <label for="categorie">Catégorie</label>
-                <select name="categorie" id="categorie" required> <!--Génération automatique a partir du serveur-->
-                    <option value="">Choisir Une Catégorie</option>
-                    <option value="1">Voiture</option>
-                    <option value="2">Moto</option>
-                    <option value="3">Velo</option>
+                <select name="categorie" id="categorie" required>
+                    <?php
+                    $conn = connectDB();
+                    $stmt = $conn->prepare("SELECT * FROM categories");
+                    $stmt->execute();
+                    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    foreach ($result as $row) {
+                        echo "<option value='" . $row['NoCategorie'] . "' ". ($rowAnnonce['Categorie'] == $row['NoCategorie'] ? 'selected' : '') . ">" . $row['Description'] . "</option>";
+                    }
+                    $conn = null;
+                    ?>
                 </select>
             </div>
             <div>
                 <label for="prix">Prix</label>
-                <input type="text" name="prix" id="prix" required>
+                <input type="text" name="prix" id="prix" value="<?php echo $rowAnnonce['Prix'] ?>" required>
             </div>
             <div>
-                <label for="fileToUpload">Ajouter une image</label>
-                <input type="file" name="fileToUpload" id="fileToUpload" accept="image/*" required>
+                <label for="fileToUpload">Ajouter une nouvelle image</label>
+                <input type="file" name="fileToUpload" id="fileToUpload" accept="image/*">
+            </div>
+            <div>
+                <label for="previousPhoto">Image entreposée</label>
+                <img class="previewImage" src="<?php echo $rowAnnonce['Photo'] ?>">
             </div>
             <div>
                 <label for="etat">État</label>
-                <select name="etat" id="etat" required> <!--Génération automatique a partir du serveur-->
-                    <option value="1">Actif</option>
-                    <option value="2">Inactif</option>
+                <select name="etat" id="etat" required>
+                    <option value="1" <?php echo $rowAnnonce['Etat'] == 1 ? 'selected' : ''?>>Actif</option>
+                    <option value="2" <?php echo $rowAnnonce['Etat'] != 1 ? 'selected' : ''?>>Inactif</option>
                 </select>
             </div>
+            <input type="hidden" name="NoAnnonceToModify" value="<?php echo $NoAnnonceToModify ?>">
             <span class="error" id="errorMessage">&nbsp;</span>
-            <button type="button" id="btnSubmit">Ajouter Annonce</button>
+            <span class="success" id="successMessage"><?php echo $message?></span>
+            <button type="button" id="btnSubmit">Modifier Annonce</button>
         </div>
     </form>
 </div>
@@ -61,7 +189,6 @@ require_once 'en-tete.php';
 
         //Validation des champs
 
-        console.log(fileName.length);
         if(("photos-annonce/" + fileName).length > 50) {
             errorMessage.innerHTML = "Le nom de l'image est trop grand";
             return;
@@ -86,9 +213,6 @@ require_once 'en-tete.php';
                 img.src = e.target.result;
             };
             reader.readAsDataURL(file);
-        } else {
-            errorMessage.textContent = 'Veuillez sélectionner un fichier.';
-            return;
         }
         if(descriptionAbregee.length < 3) {
             errorMessage.innerHTML = "La description abregee doit contenir au moins 3 caractères";

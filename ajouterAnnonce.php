@@ -4,9 +4,73 @@ $strNomFichierCSS = 'style/annonces.css';
 require_once 'librairies-communes-2018-mm-jj.php';
 require_once 'en-tete.php';
 
+$message = '&nbsp;';
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if(isset($_POST['descriptionAbregee'], $_POST['descriptionComplete'], $_POST['categorie'], $_POST['prix'], $_FILES['fileToUpload'], $_POST['etat'])) {
+        $descriptionAbregee = $_POST['descriptionAbregee'];
+        $descriptionComplete = $_POST['descriptionComplete'];
+        $categ = $_POST['categorie'];
+        $prix = $_POST['prix'];
+        $etat = $_POST['etat'];
+        $user_id = $_SESSION['user_id'];
+
+        // Upload de l'image dans le dossier photos-annonce
+        $targetDir = "photos-annonce/";
+
+        // Creation du dossier si inexistant
+        if (!file_exists($targetDir)) {
+            mkdir($targetDir, 0777, true);
+        }
+
+        // Création du chemin relatif de l'image
+        $targetFile = $targetDir . basename($_FILES["fileToUpload"]["name"]);
+        $uploadOk = 1; // check if upload is ok
+
+        // Vérification du type de l'image
+        $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
+        if ($check !== false) {
+            $message = "Le fichier est une image - " . $check["mime"] . ".";
+            $uploadOk = 1;
+        } else {
+            $message = "Le fichier n'est pas une image.";
+            $uploadOk = 0;
+        }
+
+         // Check file size (limit set to 5MB in this example)
+        if ($_FILES["fileToUpload"]["size"] > 5000000) {
+            $message = "Désolez, le fichier est trop volumineux.";
+            $uploadOk = 0;
+        }
+
+         // Check if everything is okay before uploading
+        if ($uploadOk == 1) {
+            if (!move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $targetFile)) {
+                $message = "Désolez, une erreur s'est produite lors de l'upload.";
+            }else{
+                $conn = connectDB();
+
+                $stmt = $conn->prepare("INSERT INTO annonces (DescriptionAbregee, DescriptionComplete, Categorie, Prix, Photo, Etat, NoUtilisateur, Parution, MiseAJour) VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), NOW())");
+
+                $stmt->bindParam(1, $descriptionAbregee);
+                $stmt->bindParam(2, $descriptionComplete);
+                $stmt->bindParam(3, $categ);
+                $stmt->bindParam(4, $prix);
+                $stmt->bindParam(5, $targetFile);
+                $stmt->bindParam(6, $etat);
+                $stmt->bindParam(7, $user_id);
+                $stmt->execute();
+                $conn = null;
+                $message = 'Annonce ajoutée avec succès';
+            }
+        }
+    }else{
+        $message = 'Probleme de requete serveur';
+    }
+}
+
 ?>
 <div class="contenu">
-    <form class="ajouter-annonce-form" action="ajouterAnnonce.php" method="post">
+    <form class="ajouter-annonce-form" action="ajouterAnnonce.php" method="post" enctype="multipart/form-data">
         <div class="ajouter-annonce-card">
             <h1>Ajouter une Annonce</h1>
             <div>
@@ -19,11 +83,17 @@ require_once 'en-tete.php';
             </div>
             <div>
                 <label for="categorie">Catégorie</label>
-                <select name="categorie" id="categorie" required> <!--Génération automatique a partir du serveur-->
-                    <option value="">Choisir Une Catégorie</option>
-                    <option value="1">Voiture</option>
-                    <option value="2">Moto</option>
-                    <option value="3">Velo</option>
+                <select name="categorie" id="categorie" required>
+                    <?php
+                    $conn = connectDB();
+                    $stmt = $conn->prepare("SELECT * FROM categories");
+                    $stmt->execute();
+                    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    foreach ($result as $row) {
+                        echo "<option value='" . $row['NoCategorie'] . "'>" . $row['Description'] . "</option>";
+                    }
+                    $conn = null;
+                    ?>
                 </select>
             </div>
             <div>
@@ -36,12 +106,13 @@ require_once 'en-tete.php';
             </div>
             <div>
                 <label for="etat">État</label>
-                <select name="etat" id="etat" required> <!--Génération automatique a partir du serveur-->
+                <select name="etat" id="etat" required>
                     <option value="1">Actif</option>
                     <option value="2">Inactif</option>
                 </select>
             </div>
             <span class="error" id="errorMessage">&nbsp;</span>
+            <span class="success" id="successMessage"><?php echo $message?></span>
             <button type="button" id="btnSubmit">Ajouter Annonce</button>
         </div>
     </form>
@@ -61,7 +132,6 @@ require_once 'en-tete.php';
 
         //Validation des champs
 
-        console.log(fileName.length);
         if(("photos-annonce/" + fileName).length > 50) {
             errorMessage.innerHTML = "Le nom de l'image est trop grand";
             return;
