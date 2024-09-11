@@ -1,5 +1,4 @@
 <?php
-$strTitreApplication = 'Projet PHP';
 $strNomFichierCSS = 'style/annonces.css';
 require_once 'librairies-communes-2018-mm-jj.php';
 require_once 'en-tete.php';
@@ -36,6 +35,7 @@ $nbAnnoncesTotal = mysqli_num_rows($result);
 
 // Calculer le nombre total de pages
 $nbPages = ceil($nbAnnoncesTotal / $nbAnnoncesParPage);
+if($nbPages == 0) $nbPages = 1; // Assure qu'il y a au moins une page
 
 // Calculer le offset
 $offset = ($page - 1) * $nbAnnoncesParPage;
@@ -89,7 +89,7 @@ if($tri == "Parution") {
             </select>
             <div class="grow center">
                 <input type="text" id="txtRecherche" name="txtRecherche">
-                <img class="icon" src="photos-annonce/loupe.png" id="btnRecherche">
+                <img class="icon" src="images/loupe.png" id="btnRecherche">
             </div>
             <label for="ddlNoPage">Pages</label>
             <select name="ddlNoPage" id="ddlNoPage" onchange="this.form.submit()">
@@ -101,10 +101,10 @@ if($tri == "Parution") {
                 }
                 ?>
             </select>
-            <img class="icon <?php echo $page == 1 ? "disabled" : ""?>" id="btnFirstPage" src="photos-annonce/first.png">
-            <img class="icon <?php echo $page == 1 ? "disabled" : ""?>" id="btnPrecedentPage" src="photos-annonce/precedent.png">
-            <img class="icon <?php echo $page == $nbPages ? "disabled" : ""?>" id="btnNextPage" src="photos-annonce/next.png">
-            <img class="icon <?php echo $page == $nbPages ? "disabled" : ""?>" id="btnLastPage" src="photos-annonce/last.png">
+            <img class="icon <?php echo $page == 1 ? "disabled" : ""?>" id="btnFirstPage" src="images/first.png">
+            <img class="icon <?php echo $page == 1 ? "disabled" : ""?>" id="btnPrecedentPage" src="images/precedent.png">
+            <img class="icon <?php echo $page == $nbPages ? "disabled" : ""?>" id="btnNextPage" src="images/next.png">
+            <img class="icon <?php echo $page == $nbPages ? "disabled" : ""?>" id="btnLastPage" src="images/last.png">
         </form>
         <div class="nbAnnonces"><?php echo "Nombre d'annonces total : " . $nbAnnoncesTotal?></div>
         <?php

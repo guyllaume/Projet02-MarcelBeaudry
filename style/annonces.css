@@ -43,6 +43,7 @@
 }
 .vignette{
     width: 144px;
+    height: 144px;
     border-radius: 20px;
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
@@ -51,6 +52,7 @@
 }
 .previewImage{
     width: 144px;
+    height: 144px;
     border-radius: 20px;
     margin-right: 10px;
 }
@@ -212,5 +214,7 @@ button:hover{
     margin-top: 30px;
 }
 .modalBody img{
-    max-width: 600px;
+    width: 400px;
+    height: 300px;
+
 }

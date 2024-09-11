@@ -1,5 +1,4 @@
 <?php
-$strTitreApplication = 'Projet PHP';
 $strNomFichierCSS = 'style/profil.css';
 //SI UTILISATEUR CONNECTE MAIS PAS DE PROFIL ON REDIRIGE VERS LA PAGE DE PROFIL
 // verirfier nom et prenom avant de rediriger. exclure admin == 1
@@ -23,6 +22,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $noTelCellulaire = $_POST['noTelCellulaire'];
     $access = $_POST['access'];
     $info = $_POST['info'];
+    if($access == "P"){
+        $noTelMaison .= "P";
+        $noTeltravail .= "P";
+        $noTelCellulaire .= "P";
+    }else{
+        $noTelMaison .= "N";
+        $noTeltravail .= "N";
+        $noTelCellulaire .= "N";
+    }
 
     $query = "UPDATE utilisateurs SET Statut = ?, NoEmpl = ?, Nom = ?, Prenom = ?, NoTelMaison = ?, NoTelTravail = ?, NoTelCellulaire = ?, AutresInfos = ?, Modification = NOW() WHERE NoUtilisateur = ?";
     $stmt = $conn->prepare($query);
@@ -46,7 +54,7 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
             <h1>Profil</h1>
             <div>
                 <label for="statut">Statut</label>
-                <select name="statut" id="statut"> <!--Génération automatique a partir du serveur-->
+                <select name="statut" id="statut">
                     <option value="">Choisir Un statut</option>
                     <option value="2">Cadre</option>
                     <option value="3">Employé de soutien</option>
@@ -68,11 +76,11 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
             </div>
             <div>
                 <label for="email">Courriel</label>
-                <span id="email"><!--Email from user table-->Gggg@gmail.com</span>
+                <span id="email"><?php echo $user['Courriel']; ?></span>
             </div>
             <div>
                 <label for="password">Mot de passe</label>
-                <button id="btnModifierMotDePasse">Modifier Mot de Passe</button> <!--Redirects to resetPassword.php WIP-->
+                <button id="btnModifierMotDePasse" type="button">Modifier Mot de Passe</button>
             </div>
             <div>
                 <label for="noTelMaison">No Téléphone Maison</label>
@@ -105,7 +113,7 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 <script>
     document.getElementById('btnModifierMotDePasse').addEventListener('click', function() {
-        window.location.href = 'resetPassword.php'; //WIP
+        window.location.href = 'resetPassword.php';
     })
     document.getElementById('btnSubmit').addEventListener('click', function() {
         //Regex

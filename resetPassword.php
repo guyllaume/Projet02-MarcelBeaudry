@@ -1,5 +1,4 @@
 <?php
-$strTitreApplication = 'Projet PHP';
 $strNomFichierCSS = 'style/loginSignup.css';
 $bIsConnected = isset($_SESSION['user_id']);
 require_once 'librairies-communes-2018-mm-jj.php';

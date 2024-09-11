@@ -1,5 +1,4 @@
 <?php
-$strTitreApplication = 'Projet PHP';
 $strNomFichierCSS = 'style/annonces.css';
 require_once 'librairies-communes-2018-mm-jj.php';
 require_once 'en-tete.php';
@@ -38,6 +37,7 @@ $nbAnnoncesTotal = mysqli_num_rows($result);
 
 // Calculer le nombre total de pages
 $nbPages = ceil($nbAnnoncesTotal / $nbAnnoncesParPage);
+if($nbPages == 0) $nbPages = 1; // Assure qu'il y a au moins une page
 
 // Calculer le offset
 $offset = ($page - 1) * $nbAnnoncesParPage;
@@ -80,10 +80,10 @@ if($tri == "Categorie") {
                 }
                 ?>
             </select>
-            <img class="icon <?php echo $page == 1 ? "disabled" : ""?>" id="btnFirstPage" src="photos-annonce/first.png">
-            <img class="icon <?php echo $page == 1 ? "disabled" : ""?>" id="btnPrecedentPage" src="photos-annonce/precedent.png">
-            <img class="icon <?php echo $page == $nbPages ? "disabled" : ""?>" id="btnNextPage" src="photos-annonce/next.png">
-            <img class="icon <?php echo $page == $nbPages ? "disabled" : ""?>" id="btnLastPage" src="photos-annonce/last.png">
+            <img class="icon <?php echo $page == 1 ? "disabled" : ""?>" id="btnFirstPage" src="images/first.png">
+            <img class="icon <?php echo $page == 1 ? "disabled" : ""?>" id="btnPrecedentPage" src="images/precedent.png">
+            <img class="icon <?php echo $page == $nbPages ? "disabled" : ""?>" id="btnNextPage" src="images/next.png">
+            <img class="icon <?php echo $page == $nbPages ? "disabled" : ""?>" id="btnLastPage" src="images/last.png">
             <button type="button" class="ajouterAnnonce" id="btnAjouterAnnonce">Ajouter Annonce</button>
         </form>
         <div class="nbAnnonces"><?php echo "Nombre d'annonces total : " . $nbAnnoncesTotal?></div>
@@ -116,15 +116,10 @@ if($tri == "Categorie") {
                         data-img-src="<?php echo $annonce['Photo']; ?>"
                         data-descriptionComplete="<?php echo $annonce['DescriptionComplete']; ?>"
                         <?php
-                        if(str_ends_with($utilisateur['NoTelMaison'],"N")) {
-                            echo 'data-home-phone="privé"';
-                            echo 'data-travail-phone="privé"';
-                            echo 'data-cellulaire-phone="privé"';
-                        }else{
-                            echo 'data-home-phone="'.  substr($utilisateur['NoTelMaison'],0,-1).'"';
-                            echo 'data-travail-phone="'.  substr($utilisateur['NoTelTravail'],0,-1).'"';
-                            echo 'data-cellulaire-phone="'.  substr($utilisateur['NoTelCellulaire'],0,-1).'"';
-                        }
+                        //Pas besoin de vérification puisque c'est les annonces de l'utilisateur connecté
+                        echo 'data-home-phone="'.  substr($utilisateur['NoTelMaison'],0,-1).'"';
+                        echo 'data-travail-phone="'.  substr($utilisateur['NoTelTravail'],0,-1).'"';
+                        echo 'data-cellulaire-phone="'.  substr($utilisateur['NoTelCellulaire'],0,-1).'"';
                         ?>
                         data-mise-a-jour="<?php echo $annonce['MiseAJour']; ?>"
                         ><?php echo $annonce['DescriptionAbregee']; ?></a></p>

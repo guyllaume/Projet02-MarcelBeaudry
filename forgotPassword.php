@@ -3,7 +3,6 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 require 'vendor/autoload.php';
-$strTitreApplication = 'Projet PHP';
 $strNomFichierCSS = 'style/loginSignup.css';
 require_once 'librairies-communes-2018-mm-jj.php';
 require_once 'en-tete.php';
