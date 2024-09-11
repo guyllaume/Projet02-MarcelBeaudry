@@ -1,5 +1,4 @@
 <?php
-$strTitreApplication = 'Projet PHP';
 $strNomFichierCSS = 'style/annonces.css';
 require_once 'librairies-communes-2018-mm-jj.php';
 require_once 'en-tete.php';
@@ -31,23 +30,29 @@ if(isset($_POST['ddlOrdre']) && isset($_POST['ddlTri']) && isset($_POST['ddlNbAn
 }
 
 // Calculer le nombre total d'annonces
-$result = mysqli_query($bdd, "SELECT * FROM annonces");
+$result = mysqli_query($bdd, "SELECT * FROM annonces WHERE Etat = 1");
 $nbAnnoncesTotal = mysqli_num_rows($result);
 
 // Calculer le nombre total de pages
 $nbPages = ceil($nbAnnoncesTotal / $nbAnnoncesParPage);
+if($nbPages == 0) $nbPages = 1; // Assure qu'il y a au moins une page
 
 // Calculer le offset
 $offset = ($page - 1) * $nbAnnoncesParPage;
+if($offset > $nbAnnoncesTotal) { // Vérifie si la page est invalide
+    $offset = 0;
+    $page = 1;
+}
 
 if($tri == "Parution") {
-    $result = mysqli_query($bdd, "SELECT * FROM annonces ORDER BY $tri $ordre LIMIT $nbAnnoncesParPage OFFSET $offset");
+    $result = mysqli_query($bdd, "SELECT * FROM annonces WHERE Etat = 1 ORDER BY $tri $ordre LIMIT $nbAnnoncesParPage OFFSET $offset");
 }else if($tri == "Auteur") {
     $result = mysqli_query($bdd,
      "SELECT a.*, u.prenom, u.nom
       FROM annonces a
       JOIN utilisateurs u 
       ON a.NoUtilisateur = u.NoUtilisateur 
+      WHERE a.Etat = 1
       ORDER BY u.nom $ordre, u.prenom $ordre
       LIMIT $nbAnnoncesParPage OFFSET $offset");
 }else{
@@ -56,6 +61,7 @@ if($tri == "Parution") {
       FROM annonces a
       JOIN categories c 
       ON a.Categorie = c.NoCategorie 
+      WHERE a.Etat = 1
       ORDER BY c.description $ordre
       LIMIT $nbAnnoncesParPage OFFSET $offset");
 }
@@ -83,7 +89,7 @@ if($tri == "Parution") {
             </select>
             <div class="grow center">
                 <input type="text" id="txtRecherche" name="txtRecherche">
-                <img class="icon" src="photos-annonce/loupe.png" id="btnRecherche">
+                <img class="icon" src="images/loupe.png" id="btnRecherche">
                 <div id="resultatsRecherche" class="resultats-recherche"></div>
             </div>
             <label for="ddlNoPage">Pages</label>
@@ -96,10 +102,10 @@ if($tri == "Parution") {
                 }
                 ?>
             </select>
-            <img class="icon <?php echo $page == 1 ? "disabled" : ""?>" id="btnFirstPage" src="photos-annonce/first.png">
-            <img class="icon <?php echo $page == 1 ? "disabled" : ""?>" id="btnPrecedentPage" src="photos-annonce/precedent.png">
-            <img class="icon <?php echo $page == $nbPages ? "disabled" : ""?>" id="btnNextPage" src="photos-annonce/next.png">
-            <img class="icon <?php echo $page == $nbPages ? "disabled" : ""?>" id="btnLastPage" src="photos-annonce/last.png">
+            <img class="icon <?php echo $page == 1 ? "disabled" : ""?>" id="btnFirstPage" src="images/first.png">
+            <img class="icon <?php echo $page == 1 ? "disabled" : ""?>" id="btnPrecedentPage" src="images/precedent.png">
+            <img class="icon <?php echo $page == $nbPages ? "disabled" : ""?>" id="btnNextPage" src="images/next.png">
+            <img class="icon <?php echo $page == $nbPages ? "disabled" : ""?>" id="btnLastPage" src="images/last.png">
         </form>
         <div class="nbAnnonces"><?php echo "Nombre d'annonces total : " . $nbAnnoncesTotal?></div>
         <?php
@@ -107,54 +113,52 @@ if($tri == "Parution") {
             $annonces = mysqli_fetch_all($result, MYSQLI_ASSOC);
             $i = ($page - 1) * $nbAnnoncesParPage + 1;
             foreach ($annonces as $annonce) {
-                if($annonce['Etat'] == 1) {
-                    //userInfos
-                    $mysql->requete = "SELECT * FROM utilisateurs WHERE NoUtilisateur = ?";
-                    $stmt = mysqli_prepare($bdd, $mysql->requete);
-                    mysqli_stmt_bind_param($stmt, "i", $annonce['NoUtilisateur']);
-                    mysqli_stmt_execute($stmt);
-                    $resultUser = mysqli_stmt_get_result($stmt);
-                    $utilisateur = mysqli_fetch_assoc($resultUser);
-                    //categorieInfos
-                    $mysql->requete = "SELECT * FROM categories WHERE NoCategorie = ?";
-                    $stmt = mysqli_prepare($bdd, $mysql->requete);
-                    mysqli_stmt_bind_param($stmt, "i", $annonce['Categorie']);
-                    mysqli_stmt_execute($stmt);
-                    $resultCategorie = mysqli_stmt_get_result($stmt);
-                    $categorie = mysqli_fetch_assoc($resultCategorie);
-                ?>
+                //userInfos
+                $mysql->requete = "SELECT * FROM utilisateurs WHERE NoUtilisateur = ?";
+                $stmt = mysqli_prepare($bdd, $mysql->requete);
+                mysqli_stmt_bind_param($stmt, "i", $annonce['NoUtilisateur']);
+                mysqli_stmt_execute($stmt);
+                $resultUser = mysqli_stmt_get_result($stmt);
+                $utilisateur = mysqli_fetch_assoc($resultUser);
+                //categorieInfos
+                $mysql->requete = "SELECT * FROM categories WHERE NoCategorie = ?";
+                $stmt = mysqli_prepare($bdd, $mysql->requete);
+                mysqli_stmt_bind_param($stmt, "i", $annonce['Categorie']);
+                mysqli_stmt_execute($stmt);
+                $resultCategorie = mysqli_stmt_get_result($stmt);
+                $categorie = mysqli_fetch_assoc($resultCategorie);
+            ?>
 
-                <div class="annonce-card">
-                    <img class="vignette" src="<?php echo $annonce['Photo']; ?>">
-                    <h2><?php echo $i++; ?>-</h2> 
-                    <div class="grow">
-                        <h3><?php echo $annonce['NoAnnonce']; ?></h3> 
-                        <p><a class="afficherDescriptionComplete"
-                            data-img-src="<?php echo $annonce['Photo']; ?>"
-                            data-descriptionComplete="<?php echo $annonce['DescriptionComplete']; ?>"
-                            <?php
-                            if(str_ends_with($utilisateur['NoTelMaison'],"N")) {
-                                echo 'data-home-phone="privé"';
-                                echo 'data-travail-phone="privé"';
-                                echo 'data-cellulaire-phone="privé"';
-                            }else{
-                                echo 'data-home-phone="'.  substr($utilisateur['NoTelMaison'],0,-1).'"';
-                                echo 'data-travail-phone="'.  substr($utilisateur['NoTelTravail'],0,-1).'"';
-                                echo 'data-cellulaire-phone="'.  substr($utilisateur['NoTelCellulaire'],0,-1).'"';
-                            }
-                            ?>
-                            data-mise-a-jour="<?php echo $annonce['MiseAJour']; ?>"
-                        ><?php echo $annonce['DescriptionAbregee']; ?></a></p> 
-                        <a class="<?php echo $utilisateur['NoUtilisateur'] == $_SESSION["user_id"] ? "" : "sendUserId";?>" data-id="<?php echo $utilisateur['NoUtilisateur']; ?>"><?php echo $utilisateur['Prenom'] . ' ' . $utilisateur['Nom']; ?></a>
-                    </div>
-                    <div class="right">
-                        <h3><?php echo $annonce['Parution']; ?></h3>
-                        <p><?php echo $categorie['Description']; ?></p>
-                        <p class="price"><?php echo $annonce['Prix'] == 0 ? "N/A" : $annonce['Prix']; ?>$</p> 
-                    </div>
+            <div class="annonce-card">
+                <img class="vignette" src="<?php echo $annonce['Photo']; ?>">
+                <h2><?php echo $i++; ?>-</h2> 
+                <div class="grow">
+                    <h3><?php echo $annonce['NoAnnonce']; ?></h3> 
+                    <p><a class="afficherDescriptionComplete"
+                        data-img-src="<?php echo $annonce['Photo']; ?>"
+                        data-descriptionComplete="<?php echo $annonce['DescriptionComplete']; ?>"
+                        <?php
+                        if(str_ends_with($utilisateur['NoTelMaison'],"N")) {
+                            echo 'data-home-phone="privé"';
+                            echo 'data-travail-phone="privé"';
+                            echo 'data-cellulaire-phone="privé"';
+                        }else{
+                            echo 'data-home-phone="'.  substr($utilisateur['NoTelMaison'],0,-1).'"';
+                            echo 'data-travail-phone="'.  substr($utilisateur['NoTelTravail'],0,-1).'"';
+                            echo 'data-cellulaire-phone="'.  substr($utilisateur['NoTelCellulaire'],0,-1).'"';
+                        }
+                        ?>
+                        data-mise-a-jour="<?php echo $annonce['MiseAJour']; ?>"
+                    ><?php echo $annonce['DescriptionAbregee']; ?></a></p> 
+                    <a class="<?php echo $utilisateur['NoUtilisateur'] == $_SESSION["user_id"] ? "" : "sendUserId";?>" data-id="<?php echo $utilisateur['NoUtilisateur']; ?>"><?php echo $utilisateur['Prenom'] . ' ' . $utilisateur['Nom']; ?></a>
                 </div>
-                <?php
-                }
+                <div class="right">
+                    <h3><?php echo $annonce['Parution']; ?></h3>
+                    <p><?php echo $categorie['Description']; ?></p>
+                    <p class="price"><?php echo $annonce['Prix'] == 0 ? "N/A" : $annonce['Prix']; ?>$</p> 
+                </div>
+            </div>
+            <?php
             }
         }
         ?>

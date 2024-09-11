@@ -29,7 +29,7 @@ if ($bIsConnected) {
 }
 ?>
 <head>
-   <title><?php echo $strTitreApplication; ?></title>
+   <title>Petites annonces GG</title>
    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
    <link rel="stylesheet" type="text/css" href="style/style.css" />
    <link rel="stylesheet" type="text/css" href="<?php echo $strNomFichierCSS; ?>" />
@@ -37,7 +37,11 @@ if ($bIsConnected) {
 <body>
 <div class="container">
    <nav id="navEnTete">
-      <?php echo $strTitreApplication; ?>
+      <div class="logo-container">
+         <img class="logo" src="images/logo.jpeg" />
+         <span class="titre">Petites annonces GG</span>
+         <?php if($bIsConnected && !empty($user['Nom']) && !empty($user['Prenom'])) { echo '<span class="user-connected">Bonjour ' . $user['Prenom'] . ' ' . $user['Nom'] . '</span>'; }?>
+      </div>
       <ul id="navList">
          <?php
          if(!$bIsConnected) {

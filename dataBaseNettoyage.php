@@ -1,6 +1,5 @@
 <?php
-$strTitreApplication = 'Projet PHP';
-$strNomFichierCSS = 'style/.databaseNettoyage.css';
+$strNomFichierCSS = 'style/databaseNettoyage.css';
 $bIsConnected = isset($_SESSION['user_id']);
 require_once 'librairies-communes-2018-mm-jj.php';
 require_once 'en-tete.php';
@@ -47,7 +46,7 @@ $stmtAnnounces = $conn->query($queryAnnounces);
 $announcesToDelete = $stmtAnnounces->fetchColumn();
 ?>
 
-<div class="contenu">
+<div class="contenu top">
     <h1>Nettoyage de la Base de Données</h1>
     
     <?php if (!empty($message)): ?>
