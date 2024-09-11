@@ -10,6 +10,7 @@ require_once 'db_connect.php';
 function customHash($password) {
     return substr(hash('sha256', $password), 0, 15);
 }
+
 // Vérifier si le formulaire a été soumis
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Récupérer les données du formulaire
@@ -38,10 +39,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($passwordMatch) {
             // Vérifier le statut du compte
             if ($user['Statut'] != 0) {
-                // Compte activé, rediriger vers annonces.php
+                // Compte activé, enregistrer la connexion
                 $_SESSION['user_id'] = $user['NoUtilisateur'];
                 $_SESSION['user_status'] = $user['Statut'];
-                header('Location: annonces.php');
+
+                // Enregistrer la connexion dans la table connexions
+                $stmtConn = $conn->prepare("INSERT INTO connexions (NoUtilisateur, Connexion) VALUES (:userId, NOW())");
+                $stmtConn->bindParam(':userId', $user['NoUtilisateur']);
+                $stmtConn->execute();
+
+                // Récupérer l'ID de la connexion pour la déconnexion ultérieure
+                $_SESSION['connexion_id'] = $conn->lastInsertId();
+
+                // Incrémenter NbConnexions dans la table utilisateurs
+                $stmtUpdate = $conn->prepare("UPDATE utilisateurs SET NbConnexions = NbConnexions + 1 WHERE NoUtilisateur = :userId");
+                $stmtUpdate->bindParam(':userId', $user['NoUtilisateur']);
+                $stmtUpdate->execute();
+
+                // Vérifier si le nom et le prénom sont enregistrés
+                if (empty($user['Nom']) || empty($user['Prenom'])) {
+                    header('Location: profil.php');
+                } else {
+                    header('Location: annonces.php');
+                }
                 exit();
             } else {
                 $erreur = "Votre compte n'a pas encore été activé. Veuillez vérifier votre boîte de courriel pour le lien d'activation.";
@@ -55,6 +75,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Fermer la connexion à la base de données
     $conn = null;
+}
+
+// Vérifier s'il y a un message de déconnexion
+if (isset($_GET['message'])) {
+    $message = $_GET['message'];
 }
 ?>
 
