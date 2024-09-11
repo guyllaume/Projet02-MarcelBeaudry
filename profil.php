@@ -22,6 +22,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $noTelCellulaire = $_POST['noTelCellulaire'];
     $access = $_POST['access'];
     $info = $_POST['info'];
+    if($access == "P"){
+        $noTelMaison .= "P";
+        $noTeltravail .= "P";
+        $noTelCellulaire .= "P";
+    }else{
+        $noTelMaison .= "N";
+        $noTeltravail .= "N";
+        $noTelCellulaire .= "N";
+    }
 
     $query = "UPDATE utilisateurs SET Statut = ?, NoEmpl = ?, Nom = ?, Prenom = ?, NoTelMaison = ?, NoTelTravail = ?, NoTelCellulaire = ?, AutresInfos = ?, Modification = NOW() WHERE NoUtilisateur = ?";
     $stmt = $conn->prepare($query);
