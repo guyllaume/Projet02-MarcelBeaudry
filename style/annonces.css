@@ -216,5 +216,30 @@ button:hover{
 .modalBody img{
     width: 400px;
     height: 300px;
+}
 
+/*
+.grow.center {
+    position: relative;
+}
+    */
+.resultats-recherche {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1000;
+    max-height: 300px;
+    overflow-y: auto;
+    margin-top: 2vw;
+}
+
+.resultats-recherche div {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.resultats-recherche div:hover {
+    background-color: #f1f1f1;
 }
