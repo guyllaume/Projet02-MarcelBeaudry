@@ -13,30 +13,38 @@ $conn = connectDB();
 // Traitement du formulaire
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $userId = $_SESSION['user_id'];
-    $statut = $_POST['statut'];
-    $noEmpl = $_POST['noEmpl'];
-    $nom = $_POST['nom'];
-    $prenom = $_POST['prenom'];
-    $noTelMaison = $_POST['noTelMaison'];
-    $noTeltravail = $_POST['noTeltravail'];
-    $noTelCellulaire = $_POST['noTelCellulaire'];
-    $access = $_POST['access'];
-    $info = $_POST['info'];
-    if($access == "P"){
-        $noTelMaison .= "P";
-        $noTeltravail .= "P";
-        $noTelCellulaire .= "P";
-    }else{
-        $noTelMaison .= "N";
-        $noTeltravail .= "N";
-        $noTelCellulaire .= "N";
+    $nom = trim($_POST['nom']);
+    $prenom = trim($_POST['prenom']);
+
+    // Vérifier si nom et prénom sont remplis
+    if (empty($nom) || empty($prenom)) {
+        $erreur = "Le nom et le prénom sont obligatoires.";
+    } else {
+        // Les autres champs sont optionnels
+        $statut = isset($_POST['statut']) ? $_POST['statut'] : null;
+        $noEmpl = isset($_POST['noEmpl']) ? $_POST['noEmpl'] : null;
+        $noTelMaison = isset($_POST['noTelMaison']) ? $_POST['noTelMaison'] : null;
+        $noTeltravail = isset($_POST['noTeltravail']) ? $_POST['noTeltravail'] : null;
+        $noTelCellulaire = isset($_POST['noTelCellulaire']) ? $_POST['noTelCellulaire'] : null;
+        $access = isset($_POST['access']) ? $_POST['access'] : 'P'; // Valeur par défaut 'P' pour public
+        $info = isset($_POST['info']) ? $_POST['info'] : null;
+      
+        if($access == "P"){
+            if($noTelMaison != null) $noTelMaison .= "P";
+            if($noTeltravail != null) $noTeltravail .= "P";
+            if($noTelCellulaire != null) $noTelCellulaire .= "P";
+        }else{
+            if($noTelMaison != null) $noTelMaison .= "N";
+            if($noTeltravail != null) $noTeltravail .= "N";
+            if($noTelCellulaire != null) $noTelCellulaire .= "N";
+        }
+
+        $query = "UPDATE utilisateurs SET Statut = ?, NoEmpl = ?, Nom = ?, Prenom = ?, NoTelMaison = ?, NoTelTravail = ?, NoTelCellulaire = ?, AutresInfos = ?, Modification = NOW() WHERE NoUtilisateur = ?";
+        $stmt = $conn->prepare($query);
+        $stmt->execute([$statut, $noEmpl, $nom, $prenom, $noTelMaison, $noTeltravail, $noTelCellulaire, $info, $userId]);
+
+        $message = "Profil mis à jour avec succès.";
     }
-
-    $query = "UPDATE utilisateurs SET Statut = ?, NoEmpl = ?, Nom = ?, Prenom = ?, NoTelMaison = ?, NoTelTravail = ?, NoTelCellulaire = ?, AutresInfos = ?, Modification = NOW() WHERE NoUtilisateur = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->execute([$statut, $noEmpl, $nom, $prenom, $noTelMaison, $noTeltravail, $noTelCellulaire, $info, $userId]);
-
-    $message = "Profil mis à jour avec succès.";
 }
 
 // Récupération des données actuelles de l'utilisateur
@@ -67,11 +75,11 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
             </div>
             <div>
                 <label for="nom">Nom</label>
-                <input type="text" name="nom" id="nom" maxlength="25" value="<?php echo $user['Nom']; ?>" required>
+                <input type="text" name="nom" id="nom" maxlength="25" required value="<?php echo htmlspecialchars($user['Nom'] ?? ''); ?>">
             </div>
             <div>
                 <label for="prenom">Prénom</label>
-                <input type="text" name="prenom" id="prenom" maxlength="20" value="<?php echo $user['Prenom']; ?>" required>
+                <input type="text" name="prenom" id="prenom" maxlength="20" required value="<?php echo htmlspecialchars($user['Prenom'] ?? ''); ?>">
             </div>
             <div>
                 <label for="email">Courriel</label>
@@ -155,12 +163,8 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
             errorMessage.innerHTML = "Le numéro d'employé est invalide (ex: 9999)";
             return;
         }
-        if(!nomRegex.test(nom)) {
-            errorMessage.innerHTML = "Le nom est invalide";
-            return;
-        }
-        if(!prenomRegex.test(prenom)) {
-            errorMessage.innerHTML = "Le prenom est invalide";
+        if (nom.trim() === "" || prenom.trim() === "") {
+            errorMessage.innerHTML = "Le nom et le prénom sont obligatoires.";
             return;
         }
         if(noTelMaison.length > 0 && !phoneRegex.test(noTelMaison)) {
