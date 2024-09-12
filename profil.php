@@ -21,13 +21,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $erreur = "Le nom et le prénom sont obligatoires.";
     } else {
         // Les autres champs sont optionnels
-        $statut = isset($_POST['statut']) ? $_POST['statut'] : null;
-        $noEmpl = isset($_POST['noEmpl']) ? $_POST['noEmpl'] : null;
-        $noTelMaison = isset($_POST['noTelMaison']) ? $_POST['noTelMaison'] : null;
-        $noTeltravail = isset($_POST['noTeltravail']) ? $_POST['noTeltravail'] : null;
-        $noTelCellulaire = isset($_POST['noTelCellulaire']) ? $_POST['noTelCellulaire'] : null;
+        $statut = isset($_POST['statut']) && !empty($_POST['statut']) ? $_POST['statut'] : null;
+        $noEmpl = isset($_POST['noEmpl']) && !empty($_POST['noEmpl']) ? $_POST['noEmpl'] : null;
+        $noTelMaison = isset($_POST['noTelMaison']) && !empty($_POST['noTelMaison']) ? $_POST['noTelMaison'] : null;
+        $noTeltravail = isset($_POST['noTeltravail']) && !empty($_POST['noTeltravail']) ? $_POST['noTeltravail'] : null;
+        $noTelCellulaire = isset($_POST['noTelCellulaire']) && !empty($_POST['noTelCellulaire']) ? $_POST['noTelCellulaire'] : null;
         $access = isset($_POST['access']) ? $_POST['access'] : 'P'; // Valeur par défaut 'P' pour public
-        $info = isset($_POST['info']) ? $_POST['info'] : null;
+        $info = isset($_POST['info']) && !empty($_POST['info']) ? $_POST['info'] : null;
       
         if($access == "P"){
             if($noTelMaison != null) $noTelMaison .= "P";
@@ -56,7 +56,6 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 ?>
 <div class="contenu">
-    <?php if (isset($message)) echo "<p class='message'>$message</p>"; ?>
     <form class="profil-form" action="profil.php" method="post">
         <div class="profil-card">
             <h1>Profil</h1>
@@ -64,15 +63,15 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
                 <label for="statut">Statut</label>
                 <select name="statut" id="statut">
                     <option value="">Choisir Un statut</option>
-                    <option value="2">Cadre</option>
-                    <option value="3">Employé de soutien</option>
-                    <option value="4">Enseignant</option>
-                    <option value="5">Professionnel</option>
+                    <option value="2" <?php if ($user['Statut'] == 2) echo 'selected'; ?>>Cadre</option>
+                    <option value="3" <?php if ($user['Statut'] == 3) echo 'selected'; ?>>Employé de soutien</option>
+                    <option value="4" <?php if ($user['Statut'] == 4) echo 'selected'; ?>>Enseignant</option>
+                    <option value="5" <?php if ($user['Statut'] == 5) echo 'selected'; ?>>Professionnel</option>
                 </select>
             </div>
             <div>
                 <label for="noEmpl">Numéro d'employé</label>
-                <input type="text" name="noEmpl" id="noEmpl" maxlength="4">
+                <input type="text" name="noEmpl" id="noEmpl" maxlength="4" value="<?php echo $user['NoEmpl']; ?>">
             </div>
             <div>
                 <label for="nom">Nom</label>
@@ -92,28 +91,45 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
             </div>
             <div>
                 <label for="noTelMaison">No Téléphone Maison</label>
-                <input type="text" name="noTelMaison" id="noTelMaison" maxlength="15">
+                <input type="text" name="noTelMaison" id="noTelMaison" value="<?php if(!empty($user['NoTelMaison'])) echo substr($user['NoTelMaison'], 0, -1);?>" maxlength="15">
             </div>
             <div>
                 <label for="noTeltravail">No Téléphone Travail</label>
-                <input type="text" name="noTeltravail" id="noTeltravail" maxlength="21">
+                <input type="text" name="noTeltravail" id="noTeltravail" value="<?php if(!empty($user['NoTelTravail'])) echo substr($user['NoTelTravail'], 0, -1);?>" maxlength="21">
             </div>
             <div>
                 <label for="noTelCellulaire">No Téléphone Cellulaire</label>
-                <input type="text" name="noTelCellulaire" id="noTelCellulaire" maxlength="15">
+                <input type="text" name="noTelCellulaire" id="noTelCellulaire" value="<?php if(!empty($user['NoTelCellulaire'])) echo substr($user['NoTelCellulaire'], 0, -1);?>" maxlength="15">
             </div>
             <div>
                 <label for="access">Niveau d'Accès</label>
                 <select name="access" id="access">
-                    <option value="P">Public</option>
-                    <option value="N">Privée</option>
+                    <option value="P" <?php  
+                    if (!empty($user['NoTelCellulaire'])){
+                        if (str_contains($user['NoTelCellulaire'], 'P')){ echo 'selected';} 
+                    }else if (!empty($user['noTelMaison'])){
+                        if (str_contains($user['noTelMaison'], 'P')){ echo 'selected';} 
+                    }else if (!empty($user['noTeltravail'])){
+                        if (str_contains($user['noTeltravail'], 'P')){ echo 'selected';} 
+                    }
+                    ?>>Public</option>
+                    <option value="N" <?php  
+                    if (!empty($user['NoTelCellulaire'])){
+                        if (str_contains($user['NoTelCellulaire'], 'N')){ echo 'selected';} 
+                    }else if (!empty($user['noTelMaison'])){
+                        if (str_contains($user['noTelMaison'], 'N')){ echo 'selected';} 
+                    }else if (!empty($user['noTeltravail'])){
+                        if (str_contains($user['noTeltravail'], 'N')){ echo 'selected';} 
+                    }
+                    ?>>Privée</option>
                 </select>
             </div>
             <div>
                 <label for="info">Autres informations</label>
-                <textarea rows="2" cols="50" maxlength="50" name="info" id="info"></textarea>
+                <textarea rows="2" cols="50" maxlength="50" name="info" id="info"><?php echo $user['AutresInfos'];?></textarea>
             </div>
             <span class="error" id="errorMessage">&nbsp;</span>
+            <?php if (isset($message)) echo "<p class='message'>$message</p>"; ?>
             <button type="button" id="btnSubmit">Modifier Profil</button>
         </div>
     </form>
