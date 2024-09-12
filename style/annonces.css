@@ -102,7 +102,7 @@ a:hover{
 }
 .icon{
     width: 16px;
-    margin: 0px;
+    margin-left: 0.5vw;
 }
 .icon:hover{
     cursor: pointer;

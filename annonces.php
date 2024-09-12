@@ -314,7 +314,8 @@ if($tri == "Parution") {
 
     txtRecherche.addEventListener('input', function() {
         console.log("Valeur de recherche:", this.value);
-        if (this.value.length >= 3) {
+        // Nombre de caractère écrit avant l'envoie de la requête
+        if (this.value.length >= 1) {
             console.log("Envoi de la requête à barRecherche.php");
             fetch(`barRecherche.php?query=${encodeURIComponent(this.value)}`)
                 .then(response => response.json())
@@ -332,20 +333,24 @@ if($tri == "Parution") {
     });
 
     function afficherResultats(data) {
-        resultatsRecherche.innerHTML = '';
-        if (data.length === 0) {
-            resultatsRecherche.innerHTML = '<div>Aucun résultat trouvé</div>';
-        } else {
-            data.forEach(item => {
-                const div = document.createElement('div');
-                div.textContent = item.DescriptionAbregee;
-                div.addEventListener('click', () => afficherAnnonce(item));
-                resultatsRecherche.appendChild(div);
-            });
-        }
-        resultatsRecherche.style.display = 'block';
-        console.log("Résultats affichés");
+    resultatsRecherche.innerHTML = '';
+    if (data.length === 0) {
+        resultatsRecherche.innerHTML = '<div>Aucun résultat trouvé</div>';
+    } else {
+        data.forEach(item => {
+            const div = document.createElement('div');
+            div.innerHTML = `
+                <strong>${item.DescriptionAbregee}</strong><br>
+                Auteur: ${item.PrenomAuteur} ${item.NomAuteur}<br>
+                Catégorie: ${item.NomCategorie}
+            `;
+            div.addEventListener('click', () => afficherAnnonce(item));
+            resultatsRecherche.appendChild(div);
+        });
     }
+    resultatsRecherche.style.display = 'block';
+    console.log("Résultats affichés");
+}
 
     // Fermer les résultats quand on clique en dehors
     document.addEventListener('click', function(e) {
