@@ -97,8 +97,9 @@ if($tri == "Parution") {
                 <div class="grow center">
                     <input type="text" id="txtRecherche" name="txtRecherche">
                     <img class="icon" src="images/loupe.png" id="btnRecherche">
+                    <div id="resultatsRecherche" class="resultats-recherche"></div>
                 </div>
-                <div id="resultatsRecherche" class="resultats-recherche"></div>
+                
             </div>
             <label for="ddlNoPage">Pages</label>
             <select name="ddlNoPage" id="ddlNoPage" onchange="this.form.submit()">
