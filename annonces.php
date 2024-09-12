@@ -283,7 +283,8 @@ if($tri == "Parution") {
 
     txtRecherche.addEventListener('input', function() {
         console.log("Valeur de recherche:", this.value);
-        if (this.value.length >= 3) {
+        // Nombre de caractère écrit avant l'envoie de la requête
+        if (this.value.length >= 1) {
             console.log("Envoi de la requête à barRecherche.php");
             fetch(`barRecherche.php?query=${encodeURIComponent(this.value)}`)
                 .then(response => response.json())
