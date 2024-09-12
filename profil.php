@@ -21,13 +21,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $erreur = "Le nom et le prénom sont obligatoires.";
     } else {
         // Les autres champs sont optionnels
-        $statut = isset($_POST['statut']) ? $_POST['statut'] : null;
-        $noEmpl = isset($_POST['noEmpl']) ? $_POST['noEmpl'] : null;
-        $noTelMaison = isset($_POST['noTelMaison']) ? $_POST['noTelMaison'] : null;
-        $noTeltravail = isset($_POST['noTeltravail']) ? $_POST['noTeltravail'] : null;
-        $noTelCellulaire = isset($_POST['noTelCellulaire']) ? $_POST['noTelCellulaire'] : null;
+        $statut = isset($_POST['statut']) && !empty($_POST['statut']) ? $_POST['statut'] : null;
+        $noEmpl = isset($_POST['noEmpl']) && !empty($_POST['noEmpl']) ? $_POST['noEmpl'] : null;
+        $noTelMaison = isset($_POST['noTelMaison']) && !empty($_POST['noTelMaison']) ? $_POST['noTelMaison'] : null;
+        $noTeltravail = isset($_POST['noTeltravail']) && !empty($_POST['noTeltravail']) ? $_POST['noTeltravail'] : null;
+        $noTelCellulaire = isset($_POST['noTelCellulaire']) && !empty($_POST['noTelCellulaire']) ? $_POST['noTelCellulaire'] : null;
         $access = isset($_POST['access']) ? $_POST['access'] : 'P'; // Valeur par défaut 'P' pour public
-        $info = isset($_POST['info']) ? $_POST['info'] : null;
+        $info = isset($_POST['info']) && !empty($_POST['info']) ? $_POST['info'] : null;
       
         if($access == "P"){
             if($noTelMaison != null) $noTelMaison .= "P";
