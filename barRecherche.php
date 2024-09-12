@@ -11,11 +11,16 @@ $conn = connectDB();
 if (isset($_GET['query'])) {
     $query = '%' . $_GET['query'] . '%';
     
-    $sql = "SELECT NoAnnonce, DescriptionAbregee, DescriptionComplete, Photo 
-        FROM annonces 
-        WHERE LOWER(DescriptionAbregee) LIKE LOWER(:query) 
-        OR LOWER(DescriptionComplete) LIKE LOWER(:query) 
-        LIMIT 5";
+    $sql = "SELECT DISTINCT a.NoAnnonce, a.DescriptionAbregee, a.DescriptionComplete, a.Photo,
+                   u.Nom AS NomAuteur, u.Prenom AS PrenomAuteur, c.Description AS NomCategorie
+            FROM annonces a
+            JOIN utilisateurs u ON a.NoUtilisateur = u.NoUtilisateur
+            JOIN categories c ON a.Categorie = c.NoCategorie
+            WHERE LOWER(a.DescriptionAbregee) LIKE LOWER(:query) 
+               OR LOWER(a.DescriptionComplete) LIKE LOWER(:query)
+               OR LOWER(CONCAT(u.Prenom, ' ', u.Nom)) LIKE LOWER(:query)
+               OR LOWER(c.Description) LIKE LOWER(:query)
+            LIMIT 5";
     
     $stmt = $conn->prepare($sql);
     $stmt->bindParam(':query', $query, PDO::PARAM_STR);
