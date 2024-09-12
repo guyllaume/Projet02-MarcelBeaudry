@@ -116,10 +116,20 @@ if($tri == "Categorie") {
                         data-img-src="<?php echo $annonce['Photo']; ?>"
                         data-descriptionComplete="<?php echo $annonce['DescriptionComplete']; ?>"
                         <?php
-                        //Pas besoin de vérification puisque c'est les annonces de l'utilisateur connecté
-                        echo 'data-home-phone="'.  substr($utilisateur['NoTelMaison'],0,-1).'"';
-                        echo 'data-travail-phone="'.  substr($utilisateur['NoTelTravail'],0,-1).'"';
-                        echo 'data-cellulaire-phone="'.  substr($utilisateur['NoTelCellulaire'],0,-1).'"';
+                        if($utilisateur['NoTelMaison'] != null){ 
+                            echo 'data-home-phone="'.  substr($utilisateur['NoTelMaison'],0,-1).'"';
+                        }else{
+                            echo 'data-home-phone=""';};
+                        if($utilisateur['NoTelTravail'] != null) {
+                            echo 'data-travail-phone="'.  substr($utilisateur['NoTelTravail'],0,-1).'"';
+                        }else{
+                            echo 'data-travail-phone="" ';
+                        }
+                        if($utilisateur['NoTelCellulaire'] != null) {
+                            echo 'data-cellulaire-phone="'.  substr($utilisateur['NoTelCellulaire'],0,-1).'"';
+                        }else{
+                            echo 'data-cellulaire-phone="" ';
+                        }
                         ?>
                         data-mise-a-jour="<?php echo $annonce['MiseAJour']; ?>"
                         ><?php echo $annonce['DescriptionAbregee']; ?></a></p>

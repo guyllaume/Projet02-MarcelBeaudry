@@ -146,14 +146,45 @@ if($tri == "Parution") {
                         data-img-src="<?php echo $annonce['Photo']; ?>"
                         data-descriptionComplete="<?php echo $annonce['DescriptionComplete']; ?>"
                         <?php
-                        if(str_ends_with($utilisateur['NoTelMaison'],"N")) {
-                            echo 'data-home-phone="privé"';
-                            echo 'data-travail-phone="privé"';
-                            echo 'data-cellulaire-phone="privé"';
+                        $accessCheck = false;
+                        $accessName = "";
+                        if($utilisateur['NoTelMaison'] != null) {
+                            $accessName = "NoTelMaison";
+                            $accessCheck = true;
+                        }else if($utilisateur['NoTelTravail'] != null){
+                            $accessName = "NoTelTravail";
+                            $accessCheck = true;
+                        }else if($utilisateur['NoTelCellulaire'] != null){
+                            $accessName = "NoTelCellulaire";
+                            $accessCheck = true;
+                        }
+
+                        if($accessCheck) {
+                            if(str_ends_with($utilisateur[$accessName],"N")) {
+                                echo 'data-home-phone="privé"';
+                                echo 'data-travail-phone="privé"';
+                                echo 'data-cellulaire-phone="privé"';
+                            }else{
+                                if($utilisateur['NoTelMaison'] != null){ 
+                                    echo 'data-home-phone="'.  substr($utilisateur['NoTelMaison'],0,-1).'"';
+                                }else{
+                                    echo 'data-home-phone=""';
+                                }
+                                if($utilisateur['NoTelTravail'] != null) {
+                                    echo 'data-travail-phone="'.  substr($utilisateur['NoTelTravail'],0,-1).'"';
+                                }else{
+                                    echo 'data-travail-phone="" ';
+                                }
+                                if($utilisateur['NoTelCellulaire'] != null) {
+                                    echo 'data-cellulaire-phone="'.  substr($utilisateur['NoTelCellulaire'],0,-1).  '"';
+                                }else{
+                                    echo 'data-cellulaire-phone="" ';
+                                }
+                            }
                         }else{
-                            echo 'data-home-phone="'.  substr($utilisateur['NoTelMaison'],0,-1).'"';
-                            echo 'data-travail-phone="'.  substr($utilisateur['NoTelTravail'],0,-1).'"';
-                            echo 'data-cellulaire-phone="'.  substr($utilisateur['NoTelCellulaire'],0,-1).'"';
+                            echo 'data-home-phone=""';
+                            echo 'data-travail-phone="" ';
+                            echo 'data-cellulaire-phone="" ';
                         }
                         ?>
                         data-mise-a-jour="<?php echo $annonce['MiseAJour']; ?>"
