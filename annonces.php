@@ -67,6 +67,8 @@ if($tri == "Parution") {
 }
 
 ?>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <div class="contenu top">
         <form id="options" class="options" action="annonces.php" method="post">
             <label for="ddlOrdre">Ordre par</label>
@@ -87,9 +89,15 @@ if($tri == "Parution") {
                 <option value="15" <?php if($nbAnnoncesParPage == "15") echo "selected"?>>15</option>
                 <option value="20" <?php if($nbAnnoncesParPage == "20") echo "selected"?>>20</option>
             </select>
-            <div class="grow center">
-                <input type="text" id="txtRecherche" name="txtRecherche">
-                <img class="icon" src="images/loupe.png" id="btnRecherche">
+            <div class="search-container grow">
+                <div id="calendriers" class="calendriers hidden">
+                    <input type="text" id="date-debut" placeholder="Date de début">
+                    <input type="text" id="date-fin" placeholder="Date de fin">
+                </div>
+                <div class="grow center">
+                    <input type="text" id="txtRecherche" name="txtRecherche">
+                    <img class="icon" src="images/loupe.png" id="btnRecherche">
+                </div>
                 <div id="resultatsRecherche" class="resultats-recherche"></div>
             </div>
             <label for="ddlNoPage">Pages</label>
@@ -277,29 +285,80 @@ if($tri == "Parution") {
     </script>
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-    console.log("Script de recherche chargé");
+    //console.log("Script de recherche chargé");
+    const searchContainer = document.querySelector('.search-container');
     const txtRecherche = document.getElementById('txtRecherche');
     const resultatsRecherche = document.getElementById('resultatsRecherche');
+    const btnRecherche = document.getElementById('btnRecherche');
+    const calendriers = document.getElementById('calendriers');
+    let dateDebut, dateFin;
+
+    // Initialisation des calendriers
+    flatpickr("#date-debut", {
+        dateFormat: "Y-m-d",
+        onChange: function(selectedDates) {
+            dateDebut = selectedDates[0];
+        }
+    });
+
+    flatpickr("#date-fin", {
+        dateFormat: "Y-m-d",
+        onChange: function(selectedDates) {
+            dateFin = selectedDates[0];
+        }
+    });
+
+    // Afficher le calendrier quand on clique dans la zone de recherche
+    searchContainer.addEventListener('click', function(e) {
+        if (e.target === txtRecherche || calendriers.contains(e.target)) {
+            calendriers.classList.remove('hidden');
+        }
+    });
+     // Gérer la visibilité du calendrier et des résultats
+    document.addEventListener('click', function(e) {
+        if (!searchContainer.contains(e.target)) {
+            calendriers.classList.add('hidden');
+            resultatsRecherche.style.display = 'none';
+        }
+    });
+
+    // Cacher le calendrier quand on clique ailleurs
+    document.addEventListener('click', function(e) {
+        if (e.target !== txtRecherche && !calendriers.contains(e.target) && !resultatsRecherche.contains(e.target)) {
+            calendriers.classList.add('hidden');
+            resultatsRecherche.style.display = 'none';
+        }
+    });
+
+    btnRecherche.addEventListener('click', function() {
+        effectuerRecherche();
+    });
 
     txtRecherche.addEventListener('input', function() {
-        console.log("Valeur de recherche:", this.value);
-        // Nombre de caractère écrit avant l'envoie de la requête
         if (this.value.length >= 1) {
-            console.log("Envoi de la requête à barRecherche.php");
-            fetch(`barRecherche.php?query=${encodeURIComponent(this.value)}`)
-                .then(response => response.json())
-                .then(data => {
-                    console.log("Données reçues:", data);
-                    afficherResultats(data);
-                })
-                .catch(error => {
-                    console.error('Erreur:', error);
-                });
+            effectuerRecherche();
         } else {
             resultatsRecherche.innerHTML = '';
             resultatsRecherche.style.display = 'none';
         }
     });
+
+    function effectuerRecherche() {
+        let query = txtRecherche.value;
+        let url = `barRecherche.php?query=${encodeURIComponent(query)}`;
+        
+        if (dateDebut) url += `&dateDebut=${dateDebut.toISOString().split('T')[0]}`;
+        if (dateFin) url += `&dateFin=${dateFin.toISOString().split('T')[0]}`;
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                afficherResultats(data);
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+            });
+    }
 
     function afficherResultats(data) {
     resultatsRecherche.innerHTML = '';
@@ -337,24 +396,7 @@ if($tri == "Parution") {
         resultatsRecherche.style.display = 'none'; // Cacher les résultats après sélection
     }
     });
-    txtRecherche.addEventListener('input', function() {
-        console.log("Valeur de recherche:", this.value);
-        if (this.value.length >= 3) {
-                console.log("Envoi de la requête à barRecherche.php");
-                fetch(`barRecherche.php?query=${encodeURIComponent(this.value)}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log("Données reçues:", data);
-                        afficherResultats(data);
-                    })
-                    .catch(error => {
-                        console.error('Erreur:', error);
-                    });
-            } else {
-                resultatsRecherche.innerHTML = '';
-                resultatsRecherche.style.display = 'none';
-            }
-    });
+    
 
     function afficherResultats(data) {
         resultatsRecherche.innerHTML = '';
