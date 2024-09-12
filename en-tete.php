@@ -2,7 +2,6 @@
 <?php
 session_start();
 $bIsConnected = isset($_SESSION['user_id']);
-
 if ($bIsConnected) {
     require_once 'classe-mysql.php';
     require_once '424x-cgodin-qc-ca.php';
@@ -26,6 +25,9 @@ if ($bIsConnected) {
             }
         }
     }
+}else if(basename($_SERVER['PHP_SELF']) == 'profil.php'){
+   header('Location: login.php');
+   exit();
 }
 ?>
 <head>
