@@ -1,4 +1,5 @@
 <?php
+header('Content-Type: text/html; charset=utf-8');
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
@@ -20,8 +21,9 @@ if (!$bIsConnected) {
 $conn = connectDB();
 
 $auteurId = $_POST['userToContact_id'] ?? '';
+$annonceId = $_POST['annonce_id'] ?? '';
 
-if (empty($auteurId)) {
+if (empty($auteurId) || empty($annonceId)) {
     header('Location: annonces.php');
     exit();
 }
@@ -32,6 +34,12 @@ $stmt = $conn->prepare($query);
 $stmt->execute(['auteurId' => $auteurId]);
 $auteur = $stmt->fetch(PDO::FETCH_ASSOC);
 
+// Récupérer les informations de l'annonce
+$query = "SELECT DescriptionAbregee, DescriptionComplete, Prix, Parution FROM annonces WHERE NoAnnonce = :annonceId";
+$stmt = $conn->prepare($query);
+$stmt->execute(['annonceId' => $annonceId]);
+$annonce = $stmt->fetch(PDO::FETCH_ASSOC);
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['message'])) {
     $message = $_POST['message'];
     $sujet = $_POST['sujet'];
@@ -41,6 +49,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['message'])) {
 
     try {
         //Configuration du serveur
+        $mail->CharSet = 'UTF-8';
+        $mail->Encoding = 'base64';
         $mail->isSMTP();
         $mail->Host       = 'smtp.gmail.com';
         $mail->SMTPAuth   = true;
@@ -55,10 +65,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['message'])) {
 
         //Contenu
         $mail->isHTML(true);
-        $mail->Subject = $sujet;
-        $mail->Body    = $message;
-        $mail->AltBody = strip_tags($message);
-
+        $mail->Subject = '=?UTF-8?B?'.base64_encode($sujet).'?=';
+        
+        // Inclure les détails de l'annonce dans le corps du message
+        $mailBody = "<h2>Détails de l'annonce:</h2>";
+        $mailBody .= "<p><strong>Description:</strong> " . htmlspecialchars($annonce['DescriptionAbregee']) . "</p>";
+        $mailBody .= "<p><strong>Prix:</strong> " . htmlspecialchars($annonce['Prix']) . " $</p>";
+        $mailBody .= "<p><strong>Date de publication:</strong> " . htmlspecialchars($annonce['Parution']) . "</p>";
+        $mailBody .= "<h2>Message de l'utilisateur:</h2>";
+        $mailBody .= "<p>" . nl2br(htmlspecialchars($message)) . "</p>";
+    
+        $mail->Body = $mailBody;
+        $mail->AltBody = strip_tags($mailBody);
+    
         $mail->send();
         $messageConfirmation = "Votre message a été envoyé avec succès.";
     } catch (Exception $e) {
@@ -78,8 +97,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['message'])) {
             <?php elseif (isset($messageErreur)): ?>
                 <p class="error"><?php echo $messageErreur; ?></p>
             <?php else: ?>
+                <h2>Détails de l'annonce</h2>
+                <p><strong>Description:</strong> <?php echo htmlspecialchars($annonce['DescriptionAbregee']); ?></p>
+                <p><strong>Prix:</strong> <?php echo htmlspecialchars($annonce['Prix']); ?> $</p>
+                <p><strong>Date de publication:</strong> <?php echo htmlspecialchars($annonce['Parution']); ?></p>
+                
                 <form action="contacter.php" method="post">
                     <input type="hidden" name="userToContact_id" value="<?php echo htmlspecialchars($auteurId); ?>">
+                    <input type="hidden" name="annonce_id" value="<?php echo htmlspecialchars($annonceId); ?>">
                     <div class="form-group">
                         <label for="sujet">Sujet :</label>
                         <input type="text" id="sujet" name="sujet" required>

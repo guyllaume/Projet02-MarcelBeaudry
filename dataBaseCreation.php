@@ -31,25 +31,26 @@ try {
     
     // Définir le script SQL
     $sql = "
-    -- Table utilisateurs
-    CREATE TABLE utilisateurs (
-        NoUtilisateur INT AUTO_INCREMENT PRIMARY KEY,
-        Courriel VARCHAR(50) UNIQUE NOT NULL,
-        MotDePasse VARCHAR(15) NOT NULL,
-        Creation DATETIME NOT NULL,
-        NbConnexions INT DEFAULT 0,
-        Statut INT DEFAULT 0,
-        NoEmpl INT,
-        Nom VARCHAR(25),
-        Prenom VARCHAR(20),
-        NoTelMaison VARCHAR(15),
-        NoTelTravail VARCHAR(21),
-        NoTelCellulaire VARCHAR(15),
-        Modification DATETIME,
-        AutresInfos VARCHAR(50),
-        ConfirmationToken VARCHAR(32),
-        ResetToken VARCHAR(64)
-    );
+-- Table utilisateurs
+CREATE TABLE utilisateurs (
+    NoUtilisateur INT AUTO_INCREMENT PRIMARY KEY,
+    Courriel VARCHAR(50) UNIQUE NOT NULL,
+    MotDePasse VARCHAR(15) NOT NULL,
+    Creation DATETIME NOT NULL,
+    NbConnexions INT DEFAULT 0,
+    Statut INT DEFAULT 0,
+    NoEmpl INT,
+    Nom VARCHAR(25),
+    Prenom VARCHAR(20),
+    NoTelMaison VARCHAR(15),
+    NoTelTravail VARCHAR(21),
+    NoTelCellulaire VARCHAR(15),
+    Modification DATETIME,
+    AutresInfos VARCHAR(50),
+    ConfirmationToken VARCHAR(32),
+    ResetToken VARCHAR(64),
+    ResetTokenExpiry DATETIME
+);
 
     -- Table connexions
     CREATE TABLE connexions (

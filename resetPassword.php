@@ -22,7 +22,7 @@ if ($bIsConnected) {
     $stmt->execute();
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
     $email = $user['Courriel'];
-}else {
+} else {
     $email = $_GET['email'] ?? '';
     $token = $_GET['token'] ?? '';
 }
@@ -42,15 +42,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $email = $_POST['email'];
             $token = $_POST['token'];
-            $stmt = $conn->prepare("UPDATE utilisateurs SET MotDePasse = :password, ResetToken = NULL WHERE Courriel = :email AND ResetToken = :token");
+            $stmt = $conn->prepare("UPDATE utilisateurs SET MotDePasse = :password, ResetToken = NULL WHERE Courriel = :email AND ResetToken = :token AND ResetTokenExpiry > NOW()");
             $stmt->bindParam(':password', $hashedPassword);
             $stmt->bindParam(':email', $email);
             $stmt->bindParam(':token', $token);
         }
         
         if ($stmt->execute()) {
-            $message = "Votre mot de passe a été réinitialisé avec succès.";
+            $message = "Votre mot de passe a été réinitialisé avec succès. Vous allez être redirigé vers la page de connexion.";
             $error = false;
+            header("refresh:5;url=login.php"); // Redirige après 5 secondes
         } else {
             $message = "Une erreur est survenue lors de la réinitialisation du mot de passe.";
         }

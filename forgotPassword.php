@@ -48,11 +48,12 @@ function sendResetEmail($email, $token) {
         $mail->Body    = $message; // message
         $mail->AltBody = $message; // Alternative plain text body for non-HTML mail clients
     
-        $mail->send(); // Envoi du message
+        $mail->send();
+        return true;
     } catch (Exception $e) {
         error_log("Message could not be sent. Mailer Error: {$mail->ErrorInfo}");
+        return false;
     }
-    return true; // Simule un envoi réussi
 }
 
 $message = '';
@@ -69,8 +70,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         if ($stmt->rowCount() > 0) {
             $token = bin2hex(random_bytes(16));
-            $stmt = $conn->prepare("UPDATE utilisateurs SET ResetToken = :token WHERE Courriel = :email");
+            $expiry = date('Y-m-d H:i:s', strtotime('+1 hour'));
+            $stmt = $conn->prepare("UPDATE utilisateurs SET ResetToken = :token, ResetTokenExpiry = :expiry WHERE Courriel = :email");
             $stmt->bindParam(':token', $token);
+            $stmt->bindParam(':expiry', $expiry);
             $stmt->bindParam(':email', $email);
             $stmt->execute();
             
