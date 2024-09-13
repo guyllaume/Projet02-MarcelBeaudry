@@ -5,9 +5,9 @@ require_once '424x-cgodin-qc-ca.php';
 function executeQuery($conn, $query) {
     try {
         $conn->exec($query);
-        echo "Requête exécutée avec succès : " . substr($query, 0, 50) . "...<br>";
+        //echo "Requête exécutée avec succès : " . substr($query, 0, 50) . "...<br>";
     } catch(PDOException $e) {
-        echo "Erreur lors de l'exécution de la requête : " . $e->getMessage() . "<br>";
+        //echo "Erreur lors de l'exécution de la requête : " . $e->getMessage() . "<br>";
     }
 }
 
@@ -20,11 +20,11 @@ try {
     
     // Supprimer la base de données si elle existe
     $conn->exec("DROP DATABASE IF EXISTS PJF_MARCELBEAUDRY");
-    echo "Base de données supprimée si elle existait.<br>";
+    //echo "Base de données supprimée si elle existait.<br>";
     
     // Créer la base de données
     $conn->exec("CREATE DATABASE PJF_MARCELBEAUDRY");
-    echo "Base de données créée.<br>";
+    //echo "Base de données créée.<br>";
     
     // Sélectionner la base de données
     $conn->exec("USE PJF_MARCELBEAUDRY");
