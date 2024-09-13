@@ -2,6 +2,25 @@
 $strNomFichierCSS = 'style/annonces.css';
 require_once 'librairies-communes-2018-mm-jj.php';
 require_once 'en-tete.php';
+function generateUniqueFileName($originalName) {
+    // Get the file extension
+    $fileExtension = pathinfo($originalName, PATHINFO_EXTENSION);
+    
+    // Create a base filename with timestamp
+    $baseName = 'file_' . time();
+    
+    // Ensure the base name plus extension does not exceed 50 characters
+    $maxBaseNameLength = 50 - strlen($fileExtension) - 1;
+    
+    if (strlen($baseName) > $maxBaseNameLength) {
+        $baseName = substr($baseName, 0, $maxBaseNameLength);
+    }
+    
+    // Construct the full filename
+    $newFileName = $baseName . '.' . $fileExtension;
+    
+    return $newFileName;
+}
 
 $message = '&nbsp;';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -39,6 +58,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($_FILES["fileToUpload"]["size"] > 5000000) {
             $message = "Désolez, le fichier est trop volumineux.";
             $uploadOk = 0;
+        }
+        
+        // Check if file already exists
+        if (file_exists($targetFile)) {
+            // Compare file contents
+            $existingFileContent = file_get_contents($targetFile);
+            $newFileContent = file_get_contents($_FILES["fileToUpload"]["tmp_name"]);
+            
+            if ($existingFileContent === $newFileContent) {
+                // The files are identical
+                $message = "Le fichier est déjà présent et identique.";
+            } else {
+                // Generate a unique filename
+                $fileBaseName = basename($targetFile);
+                $newFileName = generateUniqueFileName($fileBaseName);
+                $targetFile = $targetDir . $newFileName;
+            }
         }
 
          // Check if everything is okay before uploading

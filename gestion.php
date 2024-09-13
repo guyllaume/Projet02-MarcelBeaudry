@@ -108,7 +108,7 @@ if($tri == "Categorie") {
                     $categorie = mysqli_fetch_assoc($resultCategorie);
                 ?>
         <div class="annonce-card"> 
-            <img class="vignette" src="<?php echo $annonce['Photo']; ?>">
+            <img class="vignette gestion" src="<?php echo $annonce['Photo']; ?>">
             <h2><?php echo $i++; ?>-</h2>
             <div class="grow">
                 <h3><?php echo $annonce['NoAnnonce']; ?></h3>
