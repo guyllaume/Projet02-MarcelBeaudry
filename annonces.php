@@ -195,7 +195,7 @@ if($tri == "Parution") {
                 <div class="right">
                     <h3><?php echo $annonce['Parution']; ?></h3>
                     <p><?php echo $categorie['Description']; ?></p>
-                    <p class="price"><?php echo $annonce['Prix'] == 0 ? "N/A" : $annonce['Prix']; ?>$</p> 
+                    <p class="price"><?php echo $annonce['Prix'] == 0 ? "N/A" : $annonce['Prix'] . "$" ?></p> 
                 </div>
             </div>
             <?php

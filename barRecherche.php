@@ -12,7 +12,7 @@ if (isset($_GET['query'])) {
     $query = '%' . $_GET['query'] . '%';
     $params = [':query' => $query];
     
-    $sql = "SELECT DISTINCT a.NoAnnonce, a.DescriptionAbregee, a.DescriptionComplete, a.Photo,
+    $sql = "SELECT DISTINCT a.DescriptionAbregee, a.NoAnnonce, a.DescriptionComplete, a.Photo,
                    u.Nom AS NomAuteur, u.Prenom AS PrenomAuteur, c.Description AS NomCategorie,
                    a.Parution
             FROM annonces a
@@ -33,7 +33,7 @@ if (isset($_GET['query'])) {
         $params[':dateFin'] = $_GET['dateFin'];
     }
     
-    $sql .= " LIMIT 5";
+    $sql .= " LIMIT 10";
     
     $stmt = $conn->prepare($sql);
     $stmt->execute($params);

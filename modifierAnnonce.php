@@ -176,7 +176,7 @@ $conn = null;
 
 <script>
     document.getElementById('btnSubmit').addEventListener('click', function() {
-        let prixRegex = /^\d+(?:[.,]\d{1,2})?$/;
+        let prixRegex = /^-?\d+(?:[.,]\d{1,2})?$/;
         let prix = document.getElementById("prix").value;
         let descriptionAbregee = document.getElementById("descriptionAbregee").value;
         let descriptionComplete = document.getElementById("descriptionComplete").value;
@@ -230,7 +230,7 @@ $conn = null;
             return;
         }
         let normalizedPrix = parseFloat(prix.replace(",", "."));
-        if(normalizedPrix <= 0) {
+        if(normalizedPrix < 0) {
             errorMessage.innerHTML = "Le prix doit être positif";
             return;
         }

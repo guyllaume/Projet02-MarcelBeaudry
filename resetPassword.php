@@ -22,7 +22,7 @@ if ($bIsConnected) {
     $stmt->execute();
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
     $email = $user['Courriel'];
-} else {
+}else {
     $email = $_GET['email'] ?? '';
     $token = $_GET['token'] ?? '';
 }
@@ -42,16 +42,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $email = $_POST['email'];
             $token = $_POST['token'];
-            $stmt = $conn->prepare("UPDATE utilisateurs SET MotDePasse = :password, ResetToken = NULL WHERE Courriel = :email AND ResetToken = :token AND ResetTokenExpiry > NOW()");
+            $stmt = $conn->prepare("UPDATE utilisateurs SET MotDePasse = :password, ResetToken = NULL WHERE Courriel = :email AND ResetToken = :token");
             $stmt->bindParam(':password', $hashedPassword);
             $stmt->bindParam(':email', $email);
             $stmt->bindParam(':token', $token);
         }
         
         if ($stmt->execute()) {
-            $message = "Votre mot de passe a été réinitialisé avec succès. Vous allez être redirigé vers la page de connexion.";
+            $message = "Votre mot de passe a été réinitialisé avec succès.";
             $error = false;
-            header("refresh:5;url=login.php"); // Redirige après 5 secondes
+            header("refresh:5;url=login.php");
         } else {
             $message = "Une erreur est survenue lors de la réinitialisation du mot de passe.";
         }
@@ -76,14 +76,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="form-subgroup">
                         <label for="password">Nouveau mot de passe</label>
                         <div class="input-group">
-                            <input type="password" class="form-control" id="password" name="password" required>
+                            <input type="text" class="form-control" id="password" name="password" required>
                             <span class="error" id="errorPassword">&nbsp;</span>
                         </div>
                     </div>
                     <div class="form-subgroup">
                         <label for="confirmPassword">Confirmer le mot de passe</label>
                         <div class="input-group">
-                            <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
+                            <input type="text" class="form-control" id="confirmPassword" name="confirmPassword" required>
                             <span class="error" id="errorConfirmPassword">&nbsp;</span>
                         </div>
                     </div>
