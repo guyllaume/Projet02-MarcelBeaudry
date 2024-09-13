@@ -50,6 +50,9 @@
     margin: -20px;
     margin-right: 10px;
 }
+.vignette.gestion{
+    height: 212px;
+}
 .previewImage{
     width: 144px;
     height: 144px;

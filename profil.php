@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $erreur = "Le nom et le prénom sont obligatoires.";
     } else {
         // Les autres champs sont optionnels
-        $statut = isset($_POST['statut']) && !empty($_POST['statut']) ? $_POST['statut'] : null;
+        $statut = isset($_POST['statut']) && !empty($_POST['statut']) ? $_POST['statut'] : 9;
         $noEmpl = isset($_POST['noEmpl']) && !empty($_POST['noEmpl']) ? $_POST['noEmpl'] : null;
         $noTelMaison = isset($_POST['noTelMaison']) && !empty($_POST['noTelMaison']) ? $_POST['noTelMaison'] : null;
         $noTeltravail = isset($_POST['noTeltravail']) && !empty($_POST['noTeltravail']) ? $_POST['noTeltravail'] : null;

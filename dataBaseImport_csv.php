@@ -43,7 +43,7 @@ function importCSV($fileName, $tableName, $columns) {
             try {
                 // Exécuter la requête avec les données de la ligne courante
                 $stmt->execute($data);
-                echo "Ligne traitée avec succès.<br>";
+                //echo "Ligne traitée avec succès.<br>";
             } catch (PDOException $e) {
                 // En cas d'erreur, afficher un message mais continuer le traitement
                 echo "Erreur lors du traitement de la ligne : " . $e->getMessage() . "<br>";

@@ -2,11 +2,32 @@
 $strNomFichierCSS = 'style/annonces.css';
 require_once 'librairies-communes-2018-mm-jj.php';
 require_once 'en-tete.php';
+function generateUniqueFileName($originalName) {
+    // Get the file extension
+    $fileExtension = pathinfo($originalName, PATHINFO_EXTENSION);
+    
+    // Create a base filename with timestamp
+    $baseName = 'file_' . time();
+    
+    // Ensure the base name plus extension does not exceed 50 characters
+    $maxBaseNameLength = 50 - strlen($fileExtension) - 1;
+    
+    if (strlen($baseName) > $maxBaseNameLength) {
+        $baseName = substr($baseName, 0, $maxBaseNameLength);
+    }
+    
+    // Construct the full filename
+    $newFileName = $baseName . '.' . $fileExtension;
+    
+    return $newFileName;
+}
 
 $message = '&nbsp;';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if(isset($_POST['descriptionAbregee'], $_POST['descriptionComplete'], $_POST['categorie'], $_POST['prix'], $_POST['etat'], $_POST['NoAnnonceToModify'])) {
+    if(isset($_POST['descriptionAbregee'], $_POST['descriptionComplete'], $_POST['categorie'], $_POST['prix'], $_POST['etat'], $_POST['NoAnnonceToModify'], $_POST['dateParution'])) {
 
+        $dateParution = $_POST['dateParution'];
+        $dateParution == date('Y-m-d') ? $dateParution = date('Y-m-d H:i:s') : $dateParution = $dateParution . ' 00:00:00';
         $descriptionAbregee = $_POST['descriptionAbregee'];
         $descriptionComplete = $_POST['descriptionComplete'];
         $categ = $_POST['categorie'];
@@ -44,6 +65,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $uploadOk = 0;
             }
 
+            // Check if file already exists
+            if (file_exists($targetFile)) {
+                // Compare file contents
+                $existingFileContent = file_get_contents($targetFile);
+                $newFileContent = file_get_contents($_FILES["fileToUpload"]["tmp_name"]);
+                
+                if ($existingFileContent === $newFileContent) {
+                    // The files are identical
+                    $message = "Le fichier est déjà présent et identique.";
+                } else {
+                    // Generate a unique filename
+                    $fileBaseName = basename($targetFile);
+                    $newFileName = generateUniqueFileName($fileBaseName);
+                    $targetFile = $targetDir . $newFileName;
+                }
+            }
+
              // Check if everything is okay before uploading
             if ($uploadOk == 1) {
                 if (!move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $targetFile)) {
@@ -52,7 +90,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $conn = connectDB();
 
                     $stmt = $conn->prepare("UPDATE annonces 
-                                            SET DescriptionAbregee = ?, 
+                                            SET Parution = ?,
+                                                DescriptionAbregee = ?, 
                                                 DescriptionComplete = ?, 
                                                 Categorie = ?, 
                                                 Prix = ?, 
@@ -61,13 +100,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                 MiseAJour = NOW() 
                                             WHERE NoAnnonce = ?");
 
-                    $stmt->bindParam(1, $descriptionAbregee);
-                    $stmt->bindParam(2, $descriptionComplete);
-                    $stmt->bindParam(3, $categ);
-                    $stmt->bindParam(4, $prix);
-                    $stmt->bindParam(5, $targetFile);
-                    $stmt->bindParam(6, $etat);
-                    $stmt->bindParam(7, $NoAnnonceToModify);
+                    $stmt->bindParam(1, $dateParution);
+                    $stmt->bindParam(2, $descriptionAbregee);
+                    $stmt->bindParam(3, $descriptionComplete);
+                    $stmt->bindParam(4, $categ);
+                    $stmt->bindParam(5, $prix);
+                    $stmt->bindParam(6, $targetFile);
+                    $stmt->bindParam(7, $etat);
+                    $stmt->bindParam(8, $NoAnnonceToModify);
                     $stmt->execute();
                     if ($stmt->rowCount() > 0) {
                         $message = "Modification effectuée avec succès";
@@ -81,7 +121,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $conn = connectDB();
 
             $stmt = $conn->prepare("UPDATE annonces 
-                                    SET DescriptionAbregee = ?, 
+                                    SET Parution = ?,
+                                        DescriptionAbregee = ?, 
                                         DescriptionComplete = ?, 
                                         Categorie = ?, 
                                         Prix = ?, 
@@ -89,12 +130,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         MiseAJour = NOW() 
                                     WHERE NoAnnonce = ?");
 
-            $stmt->bindParam(1, $descriptionAbregee);
-            $stmt->bindParam(2, $descriptionComplete);
-            $stmt->bindParam(3, $categ);
-            $stmt->bindParam(4, $prix);
-            $stmt->bindParam(5, $etat);
-            $stmt->bindParam(6, $NoAnnonceToModify);
+            $stmt->bindParam(1, $dateParution);
+            $stmt->bindParam(2, $descriptionAbregee);
+            $stmt->bindParam(3, $descriptionComplete);
+            $stmt->bindParam(4, $categ);
+            $stmt->bindParam(5, $prix);
+            $stmt->bindParam(6, $etat);
+            $stmt->bindParam(7, $NoAnnonceToModify);
             $stmt->execute();
             $conn = null;
             if ($stmt->rowCount() > 0) {
@@ -119,11 +161,17 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $rowAnnonce = $result[0];
 $conn = null;
 
+$dateOnlyParution = substr($rowAnnonce['Parution'], 0, 10);
+
 ?>
 <div class="contenu">
     <form class="ajouter-annonce-form" action="modifierAnnonce.php" method="post" enctype="multipart/form-data">
         <div class="ajouter-annonce-card">
             <h1>Modifier une Annonce</h1>
+            <div>
+                <label for="dateParution">Date de Parution</label>
+                <input type="date" name="dateParution" id="dateParution" min="<?php echo $dateOnlyParution ?>" max="<?php echo date('Y-m-d')?>" value="<?php echo $dateOnlyParution?>" required>
+            </div>
             <div>
                 <label for="descriptionAbregee">Description Abrégée</label>
                 <textarea rows="2" cols="50" maxlength="50" name="descriptionAbregee" id="descriptionAbregee" required><?php echo $rowAnnonce['DescriptionAbregee'];?></textarea>
