@@ -204,8 +204,10 @@ if($tri == "Parution") {
         ?>
     </div>
     <form id="contacterForm" method="POST" action="contacter.php">
-        <input type="hidden" id="userToContact_id" name="userToContact_id" value="">
+    <input type="hidden" id="userToContact_id" name="userToContact_id" value="">
+    <input type="hidden" id="annonce_id" name="annonce_id" value="">
     </form>
+
     <div id="descriptionCompleteModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
@@ -245,6 +247,7 @@ if($tri == "Parution") {
         for (let i = 0; i < sendUserId.length; i++) {
             sendUserId[i].addEventListener('click', function(){
                 userToContact_id.value = this.getAttribute('data-id');
+                document.getElementById('annonce_id').value = this.closest('.annonce-card').querySelector('h3').textContent;
                 contactForm.submit();
             });
         }
