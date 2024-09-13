@@ -24,8 +24,8 @@
       function __construct($strNomBD, $strNomFichierInfosSensibles) {
          $this->nomBD = $strNomBD;
          $this->nomFichierInfosSensibles = $strNomFichierInfosSensibles;
-         $this->connexion();
-         $this->selectionneBD();
+         if($this->connexion())
+            $this->selectionneBD();
       }
       /*
       |----------------------------------------------------------------------------------|
@@ -34,12 +34,20 @@
       */
       function connexion() {
          global $strNomAdmin, $strMotPasseAdmin;
-         $this->cBD = mysqli_connect("localhost", $strNomAdmin, $strMotPasseAdmin, $this->nomBD);
+         $this->cBD = mysqli_connect("localhost", $strNomAdmin, $strMotPasseAdmin);
      
          if ($this->cBD === false) {
-             die("Problème de connexion… Message d'erreur retourné par PHP: " . mysqli_connect_error());
+            throw new Exception("Impossible de se connecter à MySQL : " . mysqli_connect_error());
          }
-         return $this->cBD;
+         // Query the information_schema to check if the database exists
+         $result = $this->cBD->query("SELECT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = '" . $this->cBD->real_escape_string($this->nomBD) . "'");
+         
+         if ($result->num_rows > 0) {
+            return $this->cBD;
+         } else {
+            $this->OK = false;
+            return false;
+         }
       }
       /*
       |----------------------------------------------------------------------------------|
