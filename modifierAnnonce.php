@@ -1,7 +1,7 @@
 <?php
 $strNomFichierCSS = 'style/annonces.css';
-require_once 'librairies-communes-2018-mm-jj.php';
 require_once 'en-tete.php';
+require_once 'db_connect.php';
 function generateUniqueFileName($originalName) {
     // Get the file extension
     $fileExtension = pathinfo($originalName, PATHINFO_EXTENSION);
@@ -27,7 +27,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if(isset($_POST['descriptionAbregee'], $_POST['descriptionComplete'], $_POST['categorie'], $_POST['prix'], $_POST['etat'], $_POST['NoAnnonceToModify'], $_POST['dateParution'])) {
 
         $dateParution = $_POST['dateParution'];
-        $dateParution == date('Y-m-d') ? $dateParution = date('Y-m-d H:i:s') : $dateParution = $dateParution . ' 00:00:00';
+        $today = new DateTime();
+        $today->modify('-4 hours');
+        $today = $today->format('Y-m-d H:i:s');
+        $dateParution == date('Y-m-d') ? $dateParution = $today : $dateParution = $dateParution . ' 00:00:00';
         $descriptionAbregee = $_POST['descriptionAbregee'];
         $descriptionComplete = $_POST['descriptionComplete'];
         $categ = $_POST['categorie'];

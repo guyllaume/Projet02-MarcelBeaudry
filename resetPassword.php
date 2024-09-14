@@ -1,10 +1,7 @@
 <?php
 $strNomFichierCSS = 'style/loginSignup.css';
 $bIsConnected = isset($_SESSION['user_id']);
-require_once 'librairies-communes-2018-mm-jj.php';
 require_once 'en-tete.php';
-require_once 'classe-mysql.php';
-require_once '424x-cgodin-qc-ca.php';
 require_once 'db_connect.php';
 
 function customHash($password) {
@@ -51,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($stmt->execute()) {
             $message = "Votre mot de passe a été réinitialisé avec succès.";
             $error = false;
-            header("refresh:5;url=login.php");
+            !$bIsConnected ? header("refresh:5;url=login.php"):'';
         } else {
             $message = "Une erreur est survenue lors de la réinitialisation du mot de passe.";
         }

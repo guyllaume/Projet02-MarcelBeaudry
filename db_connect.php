@@ -1,4 +1,5 @@
 <?php
+require_once '424x-cgodin-qc-ca.php';
 function connectDB() {
     global $strNomAdmin, $strMotPasseAdmin;
     try {

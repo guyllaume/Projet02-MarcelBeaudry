@@ -1,7 +1,4 @@
 <?php
-require_once 'librairies-communes-2018-mm-jj.php';
-require_once '424x-cgodin-qc-ca.php';
-require_once 'classe-mysql.php';
 require_once 'db_connect.php';
 
 header('Content-Type: application/json');
@@ -24,11 +21,11 @@ if (isset($_GET['query'])) {
 
     $sql = "SELECT DISTINCT a.DescriptionAbregee, a.NoAnnonce, a.DescriptionComplete, a.Photo,
                    u.Nom AS NomAuteur, u.Prenom AS PrenomAuteur, c.Description AS NomCategorie,
-                   a.Parution
+                   a.Parution, a.MiseAJour, u.NoTelMaison, u.NoTelTravail, u.NoTelCellulaire
             FROM annonces a
             JOIN utilisateurs u ON a.NoUtilisateur = u.NoUtilisateur
             JOIN categories c ON a.Categorie = c.NoCategorie
-            WHERE " . implode(' OR ', $conditions);
+            WHERE " . implode(' AND ', $conditions);
 
     if (isset($_GET['dateDebut'])) {
         $sql .= " AND a.Parution >= :dateDebut";
