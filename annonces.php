@@ -409,11 +409,12 @@ if($tri == "Parution") {
             `;
             div.addEventListener('click', () => afficherAnnonce(item));
             resultatsRecherche.appendChild(div);
-        });
-    }
-    resultatsRecherche.style.display = 'block';
-    console.log("Résultats affichés");
-}
+            });
+        }
+        resultatsRecherche.style.display = 'block';
+        console.log("Résultats affichés");
+    }   
+ 
 
     // Fermer les résultats quand on clique en dehors
     document.addEventListener('click', function(e) {
@@ -426,27 +427,19 @@ if($tri == "Parution") {
         let modal = document.getElementById("descriptionCompleteModal");
         document.getElementById("modal-img").src = annonce.Photo;
         document.getElementById("modal-descriptionComplete").innerHTML = annonce.DescriptionComplete;
-        // Ajoutez d'autres détails si nécessaire
         modal.style.display = "block";
         resultatsRecherche.style.display = 'none'; // Cacher les résultats après sélection
     }
     });
-    
 
-    function afficherResultats(data) {
-        resultatsRecherche.innerHTML = '';
-        if (data.length === 0) {
-            resultatsRecherche.innerHTML = '<div>Aucun résultat trouvé</div>';
-        } else {
-            data.forEach(item => {
-                const div = document.createElement('div');
-                div.textContent = item.DescriptionAbregee;
-                div.addEventListener('click', () => afficherAnnonce(item));
-                resultatsRecherche.appendChild(div);
-            });
-        }
-        resultatsRecherche.style.display = 'block';
-        console.log("Résultats affichés");
+    function highlightSearchTerms(text) {
+        const searchTerms = txtRecherche.value.split(' ');
+        let highlightedText = text;
+        searchTerms.forEach(term => {
+            const regex = new RegExp(term, 'gi');
+            highlightedText = highlightedText.replace(regex, match => `<mark>${match}</mark>`);
+        });
+        return highlightedText;
     }
 
     document.addEventListener('click', function(e) {
@@ -459,7 +452,6 @@ if($tri == "Parution") {
     let modal = document.getElementById("descriptionCompleteModal");
     document.getElementById("modal-img").src = annonce.Photo;
     document.getElementById("modal-descriptionComplete").innerHTML = annonce.DescriptionComplete;
-    // Ajoutez d'autres détails si nécessaire
     modal.style.display = "block";
     resultatsRecherche.style.display = 'none'; // Cacher les résultats après sélection
     }
