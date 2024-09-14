@@ -1,10 +1,6 @@
 <?php
 $strNomFichierCSS = 'style/style.css';
-$bIsConnected = isset($_SESSION['user_id']);
-require_once 'librairies-communes-2018-mm-jj.php';
 require_once 'en-tete.php';
-require_once 'classe-mysql.php';
-require_once '424x-cgodin-qc-ca.php';
 require_once 'db_connect.php';
 function displayValue($value) {
     return htmlspecialchars($value ?? '', ENT_QUOTES, 'UTF-8');

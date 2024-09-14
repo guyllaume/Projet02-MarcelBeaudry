@@ -1,7 +1,5 @@
 <?php
 session_start();
-require_once 'librairies-communes-2018-mm-jj.php';
-require_once '424x-cgodin-qc-ca.php';
 require_once 'db_connect.php';
 
 if (isset($_SESSION['user_id']) && isset($_SESSION['connexion_id'])) {

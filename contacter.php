@@ -7,16 +7,8 @@ require 'vendor/autoload.php';
 $strTitreApplication = 'Projet PHP';
 $strNomFichierCSS = 'style/contacter.css';
 $bIsConnected = isset($_SESSION['user_id']);
-require_once 'librairies-communes-2018-mm-jj.php';
 require_once 'en-tete.php';
-require_once 'classe-mysql.php';
-require_once '424x-cgodin-qc-ca.php';
 require_once 'db_connect.php';
-
-if (!$bIsConnected) {
-    header('Location: login.php');
-    exit();
-}
 
 $conn = connectDB();
 

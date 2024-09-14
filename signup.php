@@ -4,10 +4,8 @@ use PHPMailer\PHPMailer\Exception;
 
 require 'vendor/autoload.php';
 $strNomFichierCSS = 'style/loginSignup.css';
-require_once 'librairies-communes-2018-mm-jj.php';
 require_once 'en-tete.php';
 require_once 'classe-mysql.php';
-require_once '424x-cgodin-qc-ca.php';
 
 function sendConfirmationEmail($email, $token)
 {
@@ -15,13 +13,15 @@ function sendConfirmationEmail($email, $token)
     $mail = new PHPMailer(true);
 
     //lien de confirmation
-    $confirmationLink = "http://localhost/P2Local/Projet02-MarcelBeaudry/confirm.php?email=" . urlencode($email) . "&token=" . $token;
+    $confirmationLink = "http://localhost/Projet02-MarcelBeaudry/confirm.php?email=" . urlencode($email) . "&token=" . $token;
 
     // message de confirmation
     $message = "Cliquez sur le lien suivant pour confirmer votre inscription : \n\n" . $confirmationLink;
 
     // Configuration du serveur SMTP
     try {
+        $mail->CharSet = 'UTF-8';
+        $mail->Encoding = 'base64';
         $mail->isSMTP(); // Set mailer to use SMTP
         $mail->Host = 'smtp.gmail.com'; // choisir le serveur SMTP gmail
         $mail->SMTPAuth = true; // Enable SMTP authentication

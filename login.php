@@ -1,9 +1,6 @@
 <?php
 $strNomFichierCSS = 'style/loginSignup.css';
-require_once 'librairies-communes-2018-mm-jj.php';
 require_once 'en-tete.php';
-require_once 'classe-mysql.php';
-require_once '424x-cgodin-qc-ca.php';
 require_once 'db_connect.php';
 
 

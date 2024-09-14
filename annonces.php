@@ -1,21 +1,11 @@
 <?php
 $strNomFichierCSS = 'style/annonces.css';
-require_once 'librairies-communes-2018-mm-jj.php';
 require_once 'en-tete.php';
 require_once 'classe-mysql.php';
-require_once '424x-cgodin-qc-ca.php';
-require_once 'db_connect.php';
-
-$conn = connectDB();
 
 $mysql = new mysql("PJF_MARCELBEAUDRY", "424x-cgodin-qc-ca.php");
 $bdd = $mysql->cBD;
 
-// Vérifier si l'utilisateur est connecté
-if(!isset($_SESSION['user_id'])) {
-    header('Location: login.php');
-    exit;
-}
 // Récupérer les parametres d'affichage des annonces
 if(isset($_POST['ddlOrdre']) && isset($_POST['ddlTri']) && isset($_POST['ddlNbAnnoncesParPage'])) {
     $ordre = $_POST['ddlOrdre'];
@@ -320,7 +310,6 @@ if($tri == "Parution") {
     </script>
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-    //console.log("Script de recherche chargé");
     const searchContainer = document.querySelector('.search-container');
     const txtRecherche = document.getElementById('txtRecherche');
     const resultatsRecherche = document.getElementById('resultatsRecherche');
@@ -425,8 +414,20 @@ if($tri == "Parution") {
 
     function afficherAnnonce(annonce) {
         let modal = document.getElementById("descriptionCompleteModal");
+
+        if(annonce.NoTelMaison == null) annonce.NoTelMaison = "";
+        if(annonce.NoTelTravail == null) annonce.NoTelTravail = "";
+        if(annonce.NoTelCellulaire == null) annonce.NoTelCellulaire = "";
+
         document.getElementById("modal-img").src = annonce.Photo;
         document.getElementById("modal-descriptionComplete").innerHTML = annonce.DescriptionComplete;
+        document.getElementById("modal-home-phone").innerHTML = 
+            'Téléphone Maison : ' + (annonce.NoTelMaison.includes("P") ? annonce.NoTelMaison.slice(0,-1) : "Privé");
+        document.getElementById("modal-travail-phone").innerHTML = 
+            'Téléphone Travail : ' + (annonce.NoTelTravail.includes("P") ? annonce.NoTelTravail.slice(0,-1) : "Privé");
+        document.getElementById("modal-cellulaire-phone").innerHTML = 
+            'Téléphone Cellulaire : ' + (annonce.NoTelCellulaire.includes("P") ? annonce.NoTelCellulaire.slice(0,-1) : "Privé");
+        document.getElementById("modal-mise-a-jour").innerHTML = 'Dernière Mise à Jour : ' + annonce.MiseAJour;
         modal.style.display = "block";
         resultatsRecherche.style.display = 'none'; // Cacher les résultats après sélection
     }
@@ -447,18 +448,10 @@ if($tri == "Parution") {
             resultatsRecherche.style.display = 'none';
         }
     });
-
-    function afficherAnnonce(annonce) {
-    let modal = document.getElementById("descriptionCompleteModal");
-    document.getElementById("modal-img").src = annonce.Photo;
-    document.getElementById("modal-descriptionComplete").innerHTML = annonce.DescriptionComplete;
-    modal.style.display = "block";
-    resultatsRecherche.style.display = 'none'; // Cacher les résultats après sélection
-    }
 </script>
 <?php
 require_once 'pied-page.php';
-
+$mysql->deconnexion();
 ?>
 <!-- <a href="https://www.flaticon.com/free-icons/search" title="search icons">Search icons created by Pixel perfect - Flaticon</a>  -->
 <!-- <a href="https://www.flaticon.com/free-icons/arrows" title="arrows icons">Arrows icons created by gravisio - Flaticon</a> -->
