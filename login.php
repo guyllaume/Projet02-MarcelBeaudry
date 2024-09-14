@@ -6,6 +6,7 @@ require_once 'classe-mysql.php';
 require_once '424x-cgodin-qc-ca.php';
 require_once 'db_connect.php';
 
+
 function customHash($password) {
     return substr(hash('sha256', $password), 0, 15);
 }
@@ -101,7 +102,7 @@ if (isset($_GET['message'])) {
                     <div class="form-subgroup">
                         <label for="password">Mot de passe</label>
                         <div class="input-group">
-                            <input type="password" class="form-control" id="password" name="password" required>
+                            <input type="text" class="form-control" id="password" name="password" required>
                             <span class="error" id="errorPassword">&nbsp;</span>
                         </div>
                     </div>
