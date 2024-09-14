@@ -1,18 +1,10 @@
 <?php
 $strNomFichierCSS = 'style/annonces.css';
-require_once 'librairies-communes-2018-mm-jj.php';
 require_once 'en-tete.php';
 require_once 'classe-mysql.php';
-require_once '424x-cgodin-qc-ca.php';
 
 $mysql = new mysql("PJF_MARCELBEAUDRY", "424x-cgodin-qc-ca.php");
 $bdd = $mysql->cBD;
-
-// Vérifier si l'utilisateur est connecté
-if(!isset($_SESSION['user_id'])) {
-    header('Location: login.php');
-    exit;
-}
 
 //Manipulation d'annonces
 if(isset($_POST['noAnnonce']) && isset($_POST['changeEtat'])) {
@@ -138,7 +130,7 @@ if($tri == "Categorie") {
             <div class="right">
                 <h3><?php echo $annonce['Parution']; ?></h3>
                 <p><?php echo $categorie['Description']; ?></p>
-                <p class="price"><?php echo $annonce['Prix'] == 0 ? "N/A" : $annonce['Prix']; ?>$</p>
+                <p class="price"><?php echo $annonce['Prix'] == 0 ? "N/A" : $annonce['Prix'] . "$" ?></p> 
                 <div class="bottomOptions">
                     <span class="smallDate">Dernière Mise À Jour <?php echo $annonce['MiseAJour']; ?></span>
                     <button class="btnModifier" data-noAnnonce="<?php echo $annonce['NoAnnonce']; ?>">Modifier</button>

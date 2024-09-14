@@ -3,8 +3,6 @@
 session_start();
 $bIsConnected = isset($_SESSION['user_id']);
 if ($bIsConnected) {
-    require_once 'classe-mysql.php';
-    require_once '424x-cgodin-qc-ca.php';
     require_once 'db_connect.php';
 
     $conn = connectDB();
@@ -25,7 +23,12 @@ if ($bIsConnected) {
             }
         }
     }
-}else if(basename($_SERVER['PHP_SELF']) == 'profil.php'){
+}else if(basename($_SERVER['PHP_SELF']) != 'forgotPassword.php' && // Si ce n'est aucun de ses sites, ramene au login
+         basename($_SERVER['PHP_SELF']) != 'login.php' &&
+         basename($_SERVER['PHP_SELF']) != 'signup.php' &&
+         basename($_SERVER['PHP_SELF']) != 'resetPassword.php' &&
+         basename($_SERVER['PHP_SELF']) != 'confirm.php' &&
+         basename($_SERVER['PHP_SELF']) != 'index.php'){
    header('Location: login.php');
    exit();
 }
@@ -48,9 +51,9 @@ if ($bIsConnected) {
          <?php
          if(!$bIsConnected) {
          ?>
-         <li><a href="index.php">Home</a></li>
-         <li><a href="login.php">Login</a></li>
-         <li><a href="signup.php">Signup</a></li>
+         <li><a href="index.php">Accueil</a></li>
+         <li><a href="login.php">Se Connecter</a></li>
+         <li><a href="signup.php">S'Inscrire</a></li>
          <?php
          } else {
             // Vérifier si l'utilisateur est un administrateur (statut == 1)
